@@ -1,3 +1,6 @@
+package by.dm13y.study;
+
+import by.dm13y.study.StartApp;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
