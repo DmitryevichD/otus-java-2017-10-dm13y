@@ -1,3 +1,5 @@
+package by.dm13y.study;
+
 import org.apache.commons.cli.*;
 
 public class StartApp {
