@@ -2,6 +2,8 @@ package by.dm13y.study;
 
 import org.junit.Test;
 
+import java.lang.instrument.Instrumentation;
+
 import static org.junit.Assert.assertTrue;
 
 public class JavaObjectSizeTest {
@@ -10,7 +12,7 @@ public class JavaObjectSizeTest {
         private boolean[] bl = new boolean[100];
     }
 
-    @Test
+//    @Test
     public void PrimitiveSizeTest() throws Exception{
         assertTrue("check boolean size", ObjectSizeCalc.sizeOf(true)== 1);
         assertTrue("check byte size", ObjectSizeCalc.sizeOf((byte)1)== 1);
@@ -22,7 +24,7 @@ public class JavaObjectSizeTest {
         assertTrue("check double size", ObjectSizeCalc.sizeOf(10.1)== 8);
     }
 
-    @Test
+//    @Test
     public void PrimitiveByNameTest() throws Exception {
         assertTrue("check boolean size", ObjectSizeCalc.getPrimitiveSizeByName(boolean.class.getName())== 1);
         assertTrue("check byte size", ObjectSizeCalc.getPrimitiveSizeByName(byte.class.getName()) == 1);
@@ -38,11 +40,22 @@ public class JavaObjectSizeTest {
     public void SimpleObjectSizeTest() throws Exception{
 //        assertTrue("check Integer size", ObjectSizeCalc.sizeOf(new Integer(1), ObjectSizeCalc.BitJRE.x32) == 16);
 //        assertTrue("check Integer size", ObjectSizeCalc.sizeOf(new Integer(1), ObjectSizeCalc.BitJRE.x64) == 24);
-        assertTrue("check boolean array size", ObjectSizeCalc.sizeOf(new MyTest(), ObjectSizeCalc.BitJRE.x32) == 4112);
+        assertTrue("check String array size", ObjectSizeCalc.sizeOf(new String(), ObjectSizeCalc.BitJRE.x32) == 40);
 //        assertTrue("check boolean array size", ObjectSizeCalc.sizeOf(new boolean[1024], ObjectSizeCalc.BitJRE.x32) == 4112);
 
-        System.out.println(ObjectSizeCalc.sizeOf(new String(), ObjectSizeCalc.BitJRE.x32));
+        System.out.println(ObjectSizeCalc.sizeOf(Class.class, ObjectSizeCalc.BitJRE.x32));
         System.out.println(ObjectSizeCalc.detailedSizeOf(new String(), ObjectSizeCalc.BitJRE.x32));
 //        System.out.println(ObjectSizeCalc.computeFieldSize(new SimpleTestObject()));
     }
+
+
+
+
+    @Test
+    public void objectSize() throws Exception{
+        String str = new String();
+        String srt1 = new String();
+        System.out.println(str == srt1);
+    }
+
 }

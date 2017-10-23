@@ -136,6 +136,7 @@ public class ObjectSizeCalc {
     }
 
     public static Map<String, Integer> detailedSizeOf(Object obj, BitJRE jre) throws Exception{
+
         Map<String, Integer> detailInfo = new HashMap<>();
         detailInfo.put("header", jre.getHeaderSize());
         if (obj.getClass().isArray()) {
