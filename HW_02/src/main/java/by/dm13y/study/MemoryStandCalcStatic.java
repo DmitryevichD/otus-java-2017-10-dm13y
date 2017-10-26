@@ -33,8 +33,9 @@ public class MemoryStandCalcStatic implements MemoryStand {
 
     @Override
     public void makeTest(){
+        objectSize = 0;
         if(obj == null){
-            objectSize = 0;
+            return;
         }
         CalcObjRef cal = new CalcObjRef();
         try {
