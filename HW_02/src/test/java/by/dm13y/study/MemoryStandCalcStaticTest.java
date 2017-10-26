@@ -17,4 +17,14 @@ public class MemoryStandCalcStaticTest {
         ms.makeTest();
         assertTrue("check String array with diff string", ms.getResult() == 53184);
     }
+
+    @Test
+    public void MultipleExecutionTest() throws Exception{
+        MemoryStand ms = new MemoryStandCalcStatic();
+        for (int i = 0; i < 100; i++) {
+            ms.setObject(new String("1"));
+            ms.makeTest();
+            assertTrue(ms.getResult() == 40);
+        }
+    }
 }
