@@ -8,6 +8,12 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.openjdk.jol</groupId>
+            <artifactId>jol-core</artifactId>
+            <version>0.9</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <parent>
@@ -19,4 +25,5 @@
 
     <artifactId>HW_02</artifactId>
     <version>1.0</version>
+
 </project>
