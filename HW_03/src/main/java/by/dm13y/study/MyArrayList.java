@@ -28,8 +28,11 @@ public class MyArrayList<E> implements List<E> {
     private void grow(int minCapacity) {
         int currentCapacity = elements.length;
         int newCapacity = currentCapacity + (currentCapacity >> 1);
-        if(newCapacity < 0) newCapacity = Integer.MAX_VALUE;
 
+        while (newCapacity < minCapacity && newCapacity > 0) {
+            newCapacity = newCapacity + (newCapacity >> 1);
+        }
+        if(newCapacity < 0) newCapacity = Integer.MAX_VALUE;
         elements = Arrays.copyOf(elements, newCapacity);
     }
 
