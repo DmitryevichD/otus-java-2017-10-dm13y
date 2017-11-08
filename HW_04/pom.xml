@@ -9,6 +9,18 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.18</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.3-jre</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <parent>
@@ -20,6 +32,5 @@
 
     <artifactId>HW_04</artifactId>
     <version>1.0</version>
-
     
 </project>
