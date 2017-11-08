@@ -6,7 +6,6 @@ import javax.management.NotificationEmitter;
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class OutOfMemoryExecutor {
@@ -20,15 +19,17 @@ public class OutOfMemoryExecutor {
         }
     }
 
+    @SuppressWarnings({"InfiniteLoopStatement", "MismatchedQueryAndUpdateOfCollection", "RedundantStringConstructorCall"})
     private static void outOfMemory() throws Exception{
         int size = 1_000_000;
-        List<Object> array = new ArrayList<>();
+        List<String> array = new ArrayList<>();
         while (true) {
             for (int i = 0; i < size; i++) {
                 array.add(new String("" + i));
             }
+            Thread.sleep(100);
             for (int i = size - 1; i>=0; i--) {
-                if (i % 4 == 0) {
+                if (i % 2 == 0) {
                     array.remove(i);
                 }
             }
@@ -38,7 +39,6 @@ public class OutOfMemoryExecutor {
 
     public static void main(String[] args) throws Exception{
         installGCMonitoring();
-        System.out.println("start:" + new Date().getTime());
         outOfMemory();
     }
 }
