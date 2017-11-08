@@ -1,21 +1,19 @@
 package by.dm13y.study;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.omg.SendingContext.RunTime;
-
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.*;
 
-public class HW_Test {
+@SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
+public class HW_GCLogFactory {
     private final String JAVA_HOME = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
     private final String CLASSPATH = System.getProperty("java.class.path") + ":"
             + this.getClass().getResource("").getPath().replace("test-classes/by/dm13y/study/", "classes");
     private final String CLASS_NAME = OutOfMemoryExecutor.class.getCanonicalName();
-    private final String MS = "-Xms64m";
-    private final String MX = "-Xmx64m";
+    @SuppressWarnings("FieldCanBeLocal")
+    private final String MS = "-Xms128m";
+    @SuppressWarnings("FieldCanBeLocal")
+    private final String MX = "-Xmx128m";
 //    private final String META_SPACE = "-XX:MaxMetaspace=32m";
 
     private void OutOfMemoryExecutor(List<String> customVmOption, String pathToLogFile) throws Exception{
@@ -43,9 +41,9 @@ public class HW_Test {
      */
     @Test
     public void test_SGC() throws Exception{
-        OutOfMemoryExecutor(Arrays.asList("-XX:+UseSerialGC"), "log/default_SGC_Test.log");
+        OutOfMemoryExecutor(Arrays.asList("-XX:+UseSerialGC"), "log/SGC_default.lg");
         OutOfMemoryExecutor(Arrays.asList("-XX:+UseSerialGC", "-XX:MinHeapFreeRatio=35",
-                "-XX:SurvivorRatio=6", "-XX:-UseGCOverheadLimit"), "log/tuned_SGC_Test.log");
+                "-XX:SurvivorRatio=6", "-XX:NewRatio=3"), "log/SGC_tuned.lg");
     }
 
     /**
@@ -63,22 +61,21 @@ public class HW_Test {
      */
     @Test
     public void test_PGC() throws Exception{
-        OutOfMemoryExecutor(Arrays.asList("-XX:+UseParallelGC"), "log/default_PGC_Test.log");
-        OutOfMemoryExecutor(Arrays.asList("-XX:+UseParallelGC", "-XX:+UseParallelOldGC",
-                "-XX:ParallelGCThreads=6", "MaxGCPauseMillis=500"), "log/tuned_PGC_Test.log");
+        OutOfMemoryExecutor(Arrays.asList("-XX:+UseParallelGC"), "log/PGC_default.lg");
+        OutOfMemoryExecutor(Arrays.asList("-XX:+UseParallelGC",
+                "-XX:ParallelGCThreads=6", "-XX:MaxGCPauseMillis=200"), "log/PGC_tuned.lg");
     }
 
     /**
      * ParNew - basic options ("-XX:+UseParNewGC")
      *
      * @see #test_PGC()
-     * @throws Exception
      */
     @Test
     public void test_PNewGC() throws Exception{
-        OutOfMemoryExecutor(Arrays.asList("-XX:+UseParNewGC"), "log/default_PGNewC_Test.log");
+        OutOfMemoryExecutor(Arrays.asList("-XX:+UseParNewGC"), "log/PNewGC_default.lg");
         OutOfMemoryExecutor(Arrays.asList("-XX:+UseParNewGC",
-                "-XX:ParallelGCThreads=6", "MaxGCPauseMillis=500"), "log/tuned_PGNewC_Test.log");
+                "-XX:ParallelGCThreads=6", "-XX:MaxGCPauseMillis=500"), "log/PNewGC_tuned.lg");
     }
 
 
@@ -117,8 +114,8 @@ public class HW_Test {
      */
     @Test
     public void test_CMSGC() throws Exception{
-        OutOfMemoryExecutor(Arrays.asList("-XX:+UseConcMarkSweepGC"), "log/default_CMSGC_Test.log");
-        OutOfMemoryExecutor(Arrays.asList("-XX:+UseConcMarkSweepGC"), "log/tuned_CMSGC_Test.log");
+        OutOfMemoryExecutor(Arrays.asList("-XX:+UseConcMarkSweepGC"), "log/CMSGC_default.lg");
+        OutOfMemoryExecutor(Arrays.asList("-XX:+UseConcMarkSweepGC", "-XX:CMSIncrementalDutyCycle=50"), "log/CMSGC_tuned.lg");
     }
 
 
@@ -162,7 +159,7 @@ public class HW_Test {
      */
     @Test
     public void test_GC1() throws Exception{
-        OutOfMemoryExecutor(Arrays.asList("-XX:+UseG1GC"), "log/default_G1GC_Test.log");
-        OutOfMemoryExecutor(Arrays.asList("-XX:+UseG1GC", "-XX:MaxGCPauseMillis=500", "-XX:GCPauseIntervalMillis=10000"), "log/tuned_G1GC_Test.log");
+        OutOfMemoryExecutor(Arrays.asList("-XX:+UseG1GC"), "log/G1GC_default.lg");
+        OutOfMemoryExecutor(Arrays.asList("-XX:+UseG1GC", "-XX:MaxGCPauseMillis=500", "-XX:GCPauseIntervalMillis=1000"), "log/G1GC_tuned.lg");
     }
 }

@@ -1,0 +1,10 @@
+name:PS Scavenge;cause:Allocation Failure;act:end of minor GC;start:82;end:95;time:13
+name:PS Scavenge;cause:Allocation Failure;act:end of minor GC;start:122;end:155;time:33
+name:PS Scavenge;cause:Allocation Failure;act:end of minor GC;start:26334;end:26351;time:17
+name:PS Scavenge;cause:Allocation Failure;act:end of minor GC;start:26375;end:26404;time:29
+name:PS MarkSweep;cause:Ergonomics;act:end of major GC;start:26404;end:26691;time:287
+name:PS MarkSweep;cause:Ergonomics;act:end of major GC;start:26711;end:27011;time:300
+name:PS MarkSweep;cause:Ergonomics;act:end of major GC;start:106940;end:107310;time:370
+name:PS MarkSweep;cause:Ergonomics;act:end of major GC;start:107322;end:107692;time:370
+name:PS MarkSweep;cause:Ergonomics;act:end of major GC;start:262004;end:262325;time:321
+name:PS MarkSweep;cause:Ergonomics;act:end of major GC;start:262346;end:262757;time:411

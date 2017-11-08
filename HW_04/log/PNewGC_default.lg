@@ -1,0 +1,16 @@
+name:ParNew;cause:Allocation Failure;act:end of minor GC;start:80;end:98;time:18
+name:ParNew;cause:Allocation Failure;act:end of minor GC;start:131;end:175;time:44
+name:ParNew;cause:Allocation Failure;act:end of minor GC;start:26499;end:26529;time:30
+name:ParNew;cause:Allocation Failure;act:end of minor GC;start:26549;end:26549;time:0
+name:MarkSweepCompact;cause:Allocation Failure;act:end of major GC;start:26549;end:26695;time:146
+name:ParNew;cause:Allocation Failure;act:end of minor GC;start:106133;end:106133;time:0
+name:MarkSweepCompact;cause:Allocation Failure;act:end of major GC;start:106133;end:106328;time:195
+name:ParNew;cause:Allocation Failure;act:end of minor GC;start:106357;end:106357;time:0
+name:MarkSweepCompact;cause:Allocation Failure;act:end of major GC;start:106357;end:106563;time:206
+name:MarkSweepCompact;cause:Allocation Failure;act:end of major GC;start:106567;end:106749;time:182
+name:MarkSweepCompact;cause:Allocation Failure;act:end of major GC;start:106784;end:106964;time:180
+name:MarkSweepCompact;cause:Allocation Failure;act:end of major GC;start:258558;end:258800;time:242
+name:MarkSweepCompact;cause:Allocation Failure;act:end of major GC;start:258912;end:259137;time:225
+name:MarkSweepCompact;cause:Allocation Failure;act:end of major GC;start:259137;end:259380;time:243
+name:MarkSweepCompact;cause:Allocation Failure;act:end of major GC;start:259423;end:259614;time:191
+name:MarkSweepCompact;cause:Allocation Failure;act:end of major GC;start:259614;end:259770;time:156

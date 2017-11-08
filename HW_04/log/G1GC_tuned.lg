@@ -1,0 +1,20 @@
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:132;end:264;time:132
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:265;end:297;time:32
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:27621;end:27636;time:15
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:27681;end:27696;time:15
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:27722;end:28561;time:839
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:28561;end:28567;time:6
+name:G1 Old Generation;cause:Allocation Failure;act:end of major GC;start:28567;end:28779;time:212
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:115085;end:115110;time:25
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:115127;end:115914;time:787
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:115914;end:115917;time:3
+name:G1 Old Generation;cause:Allocation Failure;act:end of major GC;start:115917;end:116173;time:256
+name:G1 Young Generation;cause:G1 Humongous Allocation;act:end of minor GC;start:116182;end:116190;time:8
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:318188;end:318620;time:432
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:318620;end:318622;time:2
+name:G1 Old Generation;cause:Allocation Failure;act:end of major GC;start:318622;end:318849;time:227
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:318872;end:319876;time:1004
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:319877;end:319879;time:2
+name:G1 Old Generation;cause:Allocation Failure;act:end of major GC;start:319880;end:320134;time:254
+name:G1 Old Generation;cause:Allocation Failure;act:end of major GC;start:320134;end:320360;time:226
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:320360;end:320361;time:1

@@ -1,0 +1,41 @@
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:76;end:98;time:22
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:116;end:150;time:34
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:167;end:213;time:46
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:27075;end:27088;time:13
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:27123;end:27142;time:19
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:27152;end:27172;time:20
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:27178;end:27220;time:42
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:27226;end:27250;time:24
+name:G1 Young Generation;cause:G1 Humongous Allocation;act:end of minor GC;start:27251;end:27258;time:7
+name:G1 Old Generation;cause:Allocation Failure;act:end of major GC;start:27258;end:27458;time:200
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:114566;end:114651;time:85
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:114654;end:114661;time:7
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:114725;end:114734;time:9
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:114737;end:114796;time:59
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:114797;end:114853;time:56
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:114853;end:114854;time:1
+name:G1 Old Generation;cause:Allocation Failure;act:end of major GC;start:114854;end:115073;time:219
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:115088;end:115103;time:15
+name:G1 Young Generation;cause:G1 Humongous Allocation;act:end of minor GC;start:115107;end:115117;time:10
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:115205;end:115224;time:19
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:115226;end:115317;time:91
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:115318;end:115319;time:1
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:115319;end:115320;time:1
+name:G1 Old Generation;cause:Allocation Failure;act:end of major GC;start:115320;end:115579;time:259
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:292280;end:292296;time:16
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:292299;end:292423;time:124
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:292423;end:292448;time:25
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:292448;end:292449;time:1
+name:G1 Old Generation;cause:Allocation Failure;act:end of major GC;start:292449;end:292734;time:285
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:292741;end:292755;time:14
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:292760;end:292769;time:9
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:292866;end:292877;time:11
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:292882;end:293007;time:125
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:293008;end:293034;time:26
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:293034;end:293035;time:1
+name:G1 Old Generation;cause:Allocation Failure;act:end of major GC;start:293035;end:293302;time:267
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:293489;end:293491;time:2
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:293491;end:293492;time:1
+name:G1 Old Generation;cause:Allocation Failure;act:end of major GC;start:293492;end:293783;time:291
+name:G1 Old Generation;cause:Allocation Failure;act:end of major GC;start:293783;end:294043;time:260
+name:G1 Young Generation;cause:G1 Evacuation Pause;act:end of minor GC;start:294043;end:294044;time:1
