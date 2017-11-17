@@ -9,10 +9,4 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface Test {
     String value() default "";
-    Class<? extends Throwable> throwExecpt() default Test.None.class;
-
-    public static class None extends Throwable {
-        private None() {
-        }
-    }
 }

@@ -1,8 +1,5 @@
 package by.dm13y.study;
 
-import by.dm13y.study.annotations.After;
-
-import javax.management.ObjectName;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -20,10 +17,9 @@ public class ReflectionHelper {
         }
     }
 
-    static Object callMethod(TestCls object, Method method, Object... args) {
+    static Object callMethod(Object object, Method method, Object... args) {
         try {
-            method.setAccessible(true);
-            return method.invoke(object, method, null);
+            return method.invoke(object, args);
         }catch (IllegalAccessException | InvocationTargetException ex){
             return null;
         }
@@ -35,7 +31,7 @@ public class ReflectionHelper {
                 .toArray(Class<?>[]::new);
     }
 
-    static public  <T> Method[] getMethodsByAnnotation(Class clazz, Class<? extends Annotation> annotation){
+    static public Method[] getMethodsByAnnotation(Class clazz, Class<? extends Annotation> annotation){
         return Arrays.stream(clazz.getDeclaredMethods())
                 .filter(m -> m.getAnnotation(annotation) != null)
                 .toArray(Method[]::new);
