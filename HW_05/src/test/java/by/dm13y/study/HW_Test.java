@@ -29,6 +29,7 @@ public class HW_Test {
 
 
     public static void main(String[] args) throws Throwable {
+        TestExecutor.exec("by.dm13y.study");
         TestExecutor.exec(HW_Test.class);
     }
 }

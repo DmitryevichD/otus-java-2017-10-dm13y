@@ -4,14 +4,13 @@ import by.dm13y.study.annotations.After;
 import by.dm13y.study.annotations.Before;
 import by.dm13y.study.annotations.Test;
 
-import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.Enumeration;
+import java.nio.file.*;
 
 public class TestExecutor {
 
-    private static void execTest(Object object, Method[] before, Method test, Method[] after) throws Throwable{
+    private static void execTest(Object object, Method[] before, Method test, Method[] after){
         for (Method method : before) {
             ReflectionHelper.callMethod(object, method);
         }
@@ -20,7 +19,7 @@ public class TestExecutor {
             test.invoke(object);
         } catch (Throwable throwable) {
             if (!test.getAnnotation(Test.class).expected().equals(throwable.getCause().getClass())) {
-                throw new Exception(test.getName() + " is error -> ");
+                throw new RuntimeException(test.getName() + " is error -> ");
             }
         }
         for (Method method : after) {
@@ -28,7 +27,7 @@ public class TestExecutor {
         }
     }
 
-    public static void exec(Class testClazz, Object... args) throws Throwable{
+    public static void exec(Class testClazz, Object... args) {
         Method[] before = ReflectionHelper.getMethodsByAnnotation(testClazz, Before.class);
         Method[] test = ReflectionHelper.getMethodsByAnnotation(testClazz, Test.class);
         Method[] after = ReflectionHelper.getMethodsByAnnotation(testClazz, After.class);
@@ -37,6 +36,23 @@ public class TestExecutor {
 
         for (Method method : test) {
             execTest(instance, before, method, after);
+        }
+    }
+
+    public static void exec(String packageName) {
+        URL root = Thread.currentThread().getContextClassLoader().getResource(packageName.replace(".", "/"));
+        try {
+            String[] classes = Files.walk(Paths.get(root.toURI()))
+                    .filter(path -> path.toString().endsWith(".class"))
+                    .map(path -> path.getFileName().toString().replace(".class", ""))
+                    .toArray(String[]::new);
+
+            for (String testClass : classes) {
+                Class testClazz = Class.forName(packageName + "." + testClass);
+                exec(testClazz);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
