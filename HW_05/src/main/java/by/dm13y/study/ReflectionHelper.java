@@ -17,11 +17,11 @@ public class ReflectionHelper {
         }
     }
 
-    static Object callMethod(Object object, Method method, Object... args) {
+    static void callMethod(Object object, Method method, Object... args) {
         try {
-            return method.invoke(object, args);
+            method.invoke(object, args);
         }catch (IllegalAccessException | InvocationTargetException ex){
-            return null;
+            ex.printStackTrace();
         }
     }
 
