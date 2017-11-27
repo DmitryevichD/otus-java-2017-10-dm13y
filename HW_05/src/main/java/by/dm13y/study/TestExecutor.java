@@ -3,10 +3,20 @@ package by.dm13y.study;
 import by.dm13y.study.annotations.After;
 import by.dm13y.study.annotations.Before;
 import by.dm13y.study.annotations.Test;
+import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
+import org.reflections.scanners.Scanner;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
 
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.nio.file.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public class TestExecutor {
 
@@ -32,10 +42,12 @@ public class TestExecutor {
         Method[] test = ReflectionHelper.getMethodsByAnnotation(testClazz, Test.class);
         Method[] after = ReflectionHelper.getMethodsByAnnotation(testClazz, After.class);
 
-        Object instance = ReflectionHelper.getInstance(testClazz, args);
+        if (test.length > 0) {
+            Object instance = ReflectionHelper.getInstance(testClazz, args);
 
-        for (Method method : test) {
-            execTest(instance, before, method, after);
+            for (Method method : test) {
+                execTest(instance, before, method, after);
+            }
         }
     }
 
@@ -56,4 +68,23 @@ public class TestExecutor {
         }
     }
 
+    public static void execByReflection(String packageName) {
+        List<ClassLoader> classLoaderList = new LinkedList<>();
+        classLoaderList.add(ClasspathHelper.contextClassLoader());
+        classLoaderList.add(ClasspathHelper.staticClassLoader());
+
+        ClassLoader[] classLoaders = new ClassLoader[]{ClasspathHelper.contextClassLoader(),
+                ClasspathHelper.staticClassLoader()};
+
+        Scanner[] scanners = new Scanner[]{new SubTypesScanner(false), new ResourcesScanner()};
+
+        ConfigurationBuilder cb = new ConfigurationBuilder()
+                .setScanners(scanners)
+                .setUrls(ClasspathHelper.forClassLoader(classLoaders))
+                .filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(packageName)));
+
+        Reflections reflections = new Reflections(cb);
+        Set<Class<?>> classes = reflections.getSubTypesOf(Object.class);
+        classes.forEach(clazz -> exec(clazz));
+    }
 }

@@ -3,6 +3,9 @@ package by.dm13y.study;
 import by.dm13y.study.annotations.After;
 import by.dm13y.study.annotations.Before;
 import by.dm13y.study.annotations.Test;
+
+import java.awt.event.TextEvent;
+
 import static by.dm13y.study.Assert.*;
 
 public class HW_Test {
@@ -29,6 +32,7 @@ public class HW_Test {
 
 
     public static void main(String[] args) throws Throwable {
+        TestExecutor.execByReflection("by.dm13y.study");
         TestExecutor.exec("by.dm13y.study");
         TestExecutor.exec(HW_Test.class);
     }

@@ -1,7 +1,8 @@
 package by.dm13y.study.atm.cashbox;
 
-import by.dm13y.study.atm.Banknote;
-import by.dm13y.study.atm.Money;
+import by.dm13y.study.atm.cashbox.picker.BanknotePicker;
+import by.dm13y.study.atm.money.Banknote;
+import by.dm13y.study.atm.money.Money;
 
 import java.util.List;
 
