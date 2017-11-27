@@ -58,7 +58,6 @@ crashlytics-build.properties
 fabric.properties
 ### Java template
 # Compiled class file
-*.class
 
 # Log file
 *.log
@@ -70,7 +69,6 @@ fabric.properties
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 *.zip
@@ -85,6 +83,7 @@ hs_err_pid*
 /HW_03/HW_03.iml
 /HW_04/HW_04.iml
 /HW_05/HW_05.iml
+/HW_06/HW_06.iml
 /.idea/otus-java-2017-10-dm13y.iml
 /.idea/compiler.xml
 /.idea/misc.xml

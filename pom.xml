@@ -15,6 +15,7 @@
         <module>HW_03</module>
         <module>HW_04</module>
         <module>HW_05</module>
+        <module>HW_06</module>
     </modules>
     <properties>
         <project.build.source>1.8</project.build.source>
