@@ -10,40 +10,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class BanknotePickerImpl implements BanknotePicker {
-    private Comparator<? super Banknote> cashComparator;
-    public BanknotePickerImpl(Comparator<? super Banknote> cashComparator) {
-        this.cashComparator = cashComparator;
-    }
-
-    private Map<Banknote, CashCartridge> sorted(Map<Banknote, CashCartridge> cartridgeBox) {
-        SortedMap<Banknote, CashCartridge> newOrder = new TreeMap<Banknote, CashCartridge>(cashComparator);
-        newOrder.putAll(cartridgeBox);
-        return newOrder;
-
-    }
-
-    private void sortingCheck(Map<Banknote, CashCartridge> cartridgeBox){
-        if(cartridgeBox instanceof SortedMap){
-            if(((SortedMap)cartridgeBox).comparator().equals(cashComparator)){
-                //already sorted
-               return;
-            }
-        }
-        cartridgeBox = sorted(cartridgeBox);
-    }
 
     @Override
     public List<Banknote> pickUpMoney(Map<Banknote, CashCartridge> cartridges, Money money) throws UnsupportedOperationException {
-        sortingCheck(cartridges);
-
         Map<Banknote, Integer> banknotes = isAvailable(cartridges, money);
 
-        List<Banknote> resultList = new ArrayList<>();
 
         if(!banknotes.isEmpty()){
-            for(Map.Entry<Banknote, Integer> banknote : banknotes.entrySet()){
-                resultList.addAll(cartridges.get(banknote)   .get(banknote.getValue()));
-            }
+            List<Banknote> resultList = new ArrayList<>();
+            banknotes.forEach((banknote, count) -> resultList.addAll(cartridges.get(banknote).get(count)));
             return resultList;
         }else {
             throw new UnsupportedOperationException("Not enough banknotes");
@@ -73,4 +48,8 @@ public class BanknotePickerImpl implements BanknotePicker {
     }
 
 
+    @Override
+    public Comparator<Banknote> comparator(){
+        return (o1, o2) -> o1.getNominal().compareTo(o2.getNominal()) * -1;
+    }
 }

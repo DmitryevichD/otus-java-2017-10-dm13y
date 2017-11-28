@@ -7,10 +7,7 @@ import by.dm13y.study.atm.money.Money;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -19,31 +16,32 @@ public class BanknotePickerImplTest {
 
     @Before
     public void init(){
-        picker = new BanknotePickerImpl((banknote1, banknote2) -> banknote1.getNominal());
-
+        picker = new BanknotePickerImpl();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void pickUpMoneyException() throws Exception {
-        Map<Banknote, CashCartridge> maps = new HashMap<>();
-        maps.put(Banknote.ONE_RUB, new CashCartridgeImpl(Banknote.ONE_RUB, 100, 100));
-        maps.put(Banknote.TWO_RUB, new CashCartridgeImpl(Banknote.TWO_RUB, 100, 100));
-        maps.put(Banknote.TEN_RUB, new CashCartridgeImpl(Banknote.TEN_RUB, 100, 100));
+        Map<Banknote, CashCartridge> cartridgeBox = new HashMap<>();
+        cartridgeBox.put(Banknote.ONE_RUB, new CashCartridgeImpl(Banknote.ONE_RUB, 100, 100));
+        cartridgeBox.put(Banknote.TWO_RUB, new CashCartridgeImpl(Banknote.TWO_RUB, 100, 100));
+        cartridgeBox.put(Banknote.TEN_RUB, new CashCartridgeImpl(Banknote.TEN_RUB, 100, 100));
 
         Money money = new Money(123, 23);
-        picker.pickUpMoney(maps, money);
+        picker.pickUpMoney(cartridgeBox, money);
     }
 
     @Test
     public void pickUpMoney() throws Exception {
-        Map<Banknote, CashCartridge> maps = new HashMap<>();
-        maps.put(Banknote.ONE_RUB, new CashCartridgeImpl(Banknote.ONE_RUB, 100, 100));
-        maps.put(Banknote.TWO_RUB, new CashCartridgeImpl(Banknote.TWO_RUB, 100, 0));
-        maps.put(Banknote.TEN_RUB, new CashCartridgeImpl(Banknote.TEN_RUB, 100, 100));
+        Map<Banknote, CashCartridge> cartridgeBox = new TreeMap<>(picker.comparator());
+        cartridgeBox.put(Banknote.ONE_RUB, new CashCartridgeImpl(Banknote.ONE_RUB, 100, 100));
+        cartridgeBox.put(Banknote.TWO_RUB, new CashCartridgeImpl(Banknote.TWO_RUB, 100, 0));
+        cartridgeBox.put(Banknote.TEN_RUB, new CashCartridgeImpl(Banknote.TEN_RUB, 100, 100));
 
         Money money = new Money(123);
-        picker.pickUpMoney(maps, money);
-        int i = 10;
+        List<Banknote> banknotes = picker.pickUpMoney(cartridgeBox, money);
+        assertEquals(Collections.frequency(banknotes, Banknote.TEN_RUB),12);
+        assertEquals(Collections.frequency(banknotes, Banknote.ONE_RUB),3);
+        assertEquals(Collections.frequency(banknotes, Banknote.TWO_RUB),0);
     }
 
 

@@ -16,42 +16,26 @@ public class Money implements Comparable<Money>{
         this.cops = cops % 100;
     }
 
-    public Money(long rub){
-        this(rub, 0);
-    }
+    private long getTotalCops(){return rub * 100 + cops;}
 
-    public long getRub() {
-        return rub;
-    }
+    public Money(long rub){this(rub, 0);}
 
-    public int getCops() {
+    long getRub() {return rub;}
+
+    int getCops() {
         return cops;
     }
 
-    public boolean moreThan(@NotNull Money money) {
-        if (rub > money.rub) {
-            return true;
-        } else if (rub == money.rub && cops > money.cops) {
-            return true;
-        }else {
-            return false;
-        }
-
-    }
-
-    public boolean isZero(){
-        return rub == 0 && cops == 0;
-    }
+    public boolean isZero(){return getTotalCops() == 0;}
 
     @Override
-    public boolean equals(Object object) {
-        if(object == null) return false;
+    public boolean equals(@NotNull Object object) {
         if(object == this) return true;
         if(!(object instanceof Money)){
             return false;
         }
         Money money = (Money)object;
-        return money.rub == this.rub && money.cops == this.cops;
+        return getTotalCops() == money.getTotalCops();
     }
 
     @Override
@@ -61,7 +45,6 @@ public class Money implements Comparable<Money>{
 
     @Override
     public int compareTo(@NotNull Money money) {
-        if (rub == money.rub && cops > money.cops) return 0;
-        if()
+        return (int)(getTotalCops() - money.getTotalCops());
     }
 }

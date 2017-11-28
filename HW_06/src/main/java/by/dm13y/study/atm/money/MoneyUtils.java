@@ -12,8 +12,12 @@ public interface MoneyUtils {
         return add(money, countMoney(banknote, countBanknote));
     }
 
+    static Money add(Money money, Banknote banknote) {
+        return add(money, countMoney(banknote, 1));
+    }
+
     static Money sub(Money reduced, Money substacted) throws UnsupportedOperationException {
-        if(substacted.moreThan(reduced)) throw new UnsupportedOperationException("value can not be less than zero");
+        if(substacted.compareTo(reduced) > 0) throw new UnsupportedOperationException("value can not be less than zero");
         long rub = reduced.getRub() - substacted.getRub();
         int cops = reduced.getCops() - substacted.getCops();
         if(cops < 0){
@@ -38,7 +42,7 @@ public interface MoneyUtils {
     static int countBanknotes(Money money, Banknote banknote) {
         int countBanknotes = 0;
 
-        while(money.moreThan(banknote.getNominal())) {
+        while(money.compareTo(banknote.getNominal()) > 0) {
             countBanknotes++;
             money = sub(money, banknote.getNominal());
         }

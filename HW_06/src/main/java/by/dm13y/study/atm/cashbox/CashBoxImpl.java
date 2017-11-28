@@ -7,7 +7,6 @@ import by.dm13y.study.atm.money.MoneyUtils;
 
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class CashBoxImpl implements CashBox {
@@ -15,8 +14,9 @@ public class CashBoxImpl implements CashBox {
     private final BanknotePicker banknotePicker;
 
     public CashBoxImpl(Map<Banknote, CashCartridge> cashCartridges, BanknotePicker banknotePicker) {
-        this.cartridgeBox = cashCartridges;
         this.banknotePicker = banknotePicker;
+        this.cartridgeBox = new TreeMap<>(banknotePicker.comparator());
+        cartridgeBox.putAll(cashCartridges);
     }
 
     @Override
@@ -41,7 +41,9 @@ public class CashBoxImpl implements CashBox {
     @Override
     public Money restMoney() {
         Money totalSum = new Money();
-        cartridgeBox.forEach((banknote, cartridge) -> MoneyUtils.add(totalSum, banknote, cartridge.countBanknote()));
+        for (Map.Entry<Banknote, CashCartridge> cartrige : cartridgeBox.entrySet()) {
+            totalSum = MoneyUtils.add(totalSum, cartrige.getKey(), cartrige.getValue().countBanknote());
+        }
         return totalSum;
     }
 

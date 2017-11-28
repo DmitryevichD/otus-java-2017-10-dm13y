@@ -3,6 +3,7 @@ package by.dm13y.study.atm.cashbox;
 import by.dm13y.study.atm.money.Banknote;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CashCartridgeImpl implements CashCartridge {
@@ -55,10 +56,7 @@ public class CashCartridgeImpl implements CashCartridge {
         if (count > countBanknote()) {
             throw new UnsupportedOperationException("Banknote count too much");
         }else {
-            List<Banknote> banknoteList = new ArrayList<>(count);
-            for (int i = 0; i < count; i++) {
-                banknoteList.add(nominal);
-            }
+            List<Banknote> banknoteList = Collections.nCopies(count, nominal);
             this.count -= count;
             return banknoteList;
         }
