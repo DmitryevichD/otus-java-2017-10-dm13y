@@ -47,4 +47,9 @@ public class Money implements Comparable<Money>{
     public int compareTo(@NotNull Money money) {
         return (int)(getTotalCops() - money.getTotalCops());
     }
+
+    @Override
+    public String toString(){
+        return (rub > 0 ? rub : "0") + " р." + (cops > 0 ? cops : "00") + " k.";
+    }
 }
