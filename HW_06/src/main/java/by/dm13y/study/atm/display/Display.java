@@ -9,17 +9,17 @@ public interface Display {
         System.out.println("+====================+");
     }
 
-    default void getValue(String msg){
+    default void showInputMessage(String msg){
         System.out.print(msg + ">>> ");
     }
     default void showInfo(String info){
-        System.out.print(info);
+        System.out.print(info +  "\n");
     }
     default void showError(String msg){
-        System.err.println(msg);
+        System.err.println(msg + "\n");
     }
 
     default void showList(List<String> list){
-        System.out.println(String.join("\n", list));
+        System.out.println(String.join("\n", list) + "\n");
     }
 }
