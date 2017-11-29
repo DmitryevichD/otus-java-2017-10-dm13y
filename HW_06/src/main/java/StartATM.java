@@ -1,11 +1,12 @@
 import by.dm13y.study.atm.atm.ATMFacade;
-import by.dm13y.study.atm.atm.operations.Command;
+import by.dm13y.study.atm.atm.operations.*;
 import by.dm13y.study.atm.bank.Bank;
+import by.dm13y.study.atm.bank.BankImpl;
 import by.dm13y.study.atm.cards.Card;
 import by.dm13y.study.atm.cards.CardReader;
 import by.dm13y.study.atm.cards.SimpleCardReader;
 import by.dm13y.study.atm.cashService.CashService;
-import by.dm13y.study.atm.cashService.SimpleCashService;
+import by.dm13y.study.atm.cashService.CashServiceImpl;
 import by.dm13y.study.atm.cashbox.CashBox;
 import by.dm13y.study.atm.cashbox.CashBoxImpl;
 import by.dm13y.study.atm.cashbox.CashCartridge;
@@ -19,7 +20,6 @@ import by.dm13y.study.atm.pinpad.Pinpad;
 import by.dm13y.study.atm.printer.Printer;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,12 +35,19 @@ public class StartATM {
         cashCartridgesBox.put(Banknote.FIVE_RUB, new CashCartridgeImpl(Banknote.FIVE_RUB, 200, 100));
         cashCartridgesBox.put(Banknote.TEN_RUB, new CashCartridgeImpl(Banknote.TEN_RUB, 200, 100));
         cashCartridgesBox.put(Banknote.TWENTY_RUB, new CashCartridgeImpl(Banknote.TWENTY_RUB, 200, 100));
+        cashCartridgesBox.put(Banknote.FIFTY_RUB, new CashCartridgeImpl(Banknote.FIFTY_RUB, 200, 100));
 
         BanknotePicker bp = new BanknotePickerImpl();
 
+        Map<Integer, Command> commands = new HashMap<>();
+        commands.put(1, new Balance());
+        commands.put(2, new Cash());
+        commands.put(3, new Deposit());
+        commands.put(99, new ReturnCard());
+
         CashBox cashBox = new CashBoxImpl(cashCartridgesBox, bp);
 
-        Bank bank = null;
+        Bank bank = new BankImpl();
 
         Display display = new Display(){};
 
@@ -50,9 +57,7 @@ public class StartATM {
 
         cardReader = new SimpleCardReader();
 
-        cashService = new SimpleCashService(Arrays.asList(Banknote.values()));
-
-        Map<Integer, Command > commands = Collections.EMPTY_MAP;
+        cashService = new CashServiceImpl(Arrays.asList(Banknote.values()));
 
         atm = new ATMFacade(bank, cashBox, display, pinpad, printer,
                 cardReader, cashService, commands);
