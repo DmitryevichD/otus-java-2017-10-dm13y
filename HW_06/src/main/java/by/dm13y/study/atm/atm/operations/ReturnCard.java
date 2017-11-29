@@ -8,7 +8,14 @@ import by.dm13y.study.atm.display.Display;
 import by.dm13y.study.atm.pinpad.Pinpad;
 import by.dm13y.study.atm.printer.Printer;
 
-public interface Command {
-    void exec(Bank bank, Account account, CashBox cashBox, CashService cashService, Display display, Printer printer, Pinpad pinpad);
-    String nameOperation();
+public class ReturnCard implements Command {
+    @Override
+    public void exec(Bank bank, Account account, CashBox cashBox, CashService cashService, Display display, Printer printer, Pinpad pinpad) {
+
+    }
+
+    @Override
+    public String nameOperation() {
+        return "EXIT";
+    }
 }
