@@ -8,36 +8,21 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-public abstract class CashService extends Observable{
-    private boolean isEnabled = false;
-    private List<Banknote> acceptedBanknotes = Collections.EMPTY_LIST;
+public interface CashService{
+    void setAcceptedBanknotes(@NotNull  List<Banknote> acceptedBanknotes);
+    boolean isAccepted(Banknote banknote);
 
-    public void setAcceptedBanknotes(@NotNull  List<Banknote> acceptedBanknotes){
-        this.acceptedBanknotes = acceptedBanknotes;
-    }
-
-    protected void notifyATM(Banknote banknote){
-        if((acceptedBanknotes.contains(banknote)) && isEnabled) {
-            setChanged();
-            notifyObservers(banknote);
-        }else{
-            returnBanknote();
+    default Banknote processBanknote(Banknote banknote){
+        if(isAccepted(banknote)){
+            return banknote;
         }
+        returnBanknote(banknote);
+        throw new UnsupportedOperationException("Banknote is not supported");
     }
 
-    public void addATMObserver(Observer observer){
-        addObserver(observer);
-    }
+    default void returnBanknote(Banknote banknote){}
 
-    public void enable(){
-        isEnabled = true;
-    }
+    default void giveBanknotes(List<Banknote> banknotes){}
 
-    public void disable(){
-        isEnabled = false;
-    }
-
-    abstract void processBanknote(Banknote banknote);
-
-    public void returnBanknote(){};
+    Banknote setBanknoteEvent() throws Exception;
 }
