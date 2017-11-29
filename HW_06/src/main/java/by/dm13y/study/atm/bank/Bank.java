@@ -1,12 +1,14 @@
 package by.dm13y.study.atm.bank;
 
 import by.dm13y.study.atm.money.Money;
+import org.jetbrains.annotations.NotNull;
 
 import java.security.InvalidParameterException;
 
 public interface Bank {
-    Account getAccuant(long cardNumber) throws InvalidParameterException;
-    Money getBalance(Account account);
-    void updateBalance(Account account, Money money);
+    Account getAccount(long cardNumber);
+    Money currentBalance(Account account);
+    void reduceBalance(Account account, Money money);
+    void setDeposit(Account account, Money money);
 
 }
