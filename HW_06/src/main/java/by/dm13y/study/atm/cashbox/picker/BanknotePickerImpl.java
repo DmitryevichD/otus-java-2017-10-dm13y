@@ -36,7 +36,11 @@ public class BanknotePickerImpl implements BanknotePicker {
                 int bCount = MoneyUtils.countBanknotes(money, banknote);
                 int available = bCount > bRest ? bRest : bCount;
                 result.put(banknote, available);
-                money = MoneyUtils.sub(money, banknote, available);
+                try {
+                    money = MoneyUtils.sub(money, banknote, available);
+                } catch (UnsupportedOperationException ex) {
+                    return Collections.emptyMap();
+                }
             }
             if (money.isZero()) {return result;}
         }
