@@ -6,7 +6,7 @@ import by.dm13y.study.atm.cards.Card;
 import by.dm13y.study.atm.cards.CardReader;
 import by.dm13y.study.atm.cashService.CashService;
 import by.dm13y.study.atm.cashbox.CashBox;
-import by.dm13y.study.atm.diplay.Display;
+import by.dm13y.study.atm.display.Display;
 import by.dm13y.study.atm.money.Banknote;
 import by.dm13y.study.atm.pinpad.Pinpad;
 import by.dm13y.study.atm.printer.Printer;

@@ -12,7 +12,7 @@ import by.dm13y.study.atm.cashbox.CashCartridge;
 import by.dm13y.study.atm.cashbox.CashCartridgeImpl;
 import by.dm13y.study.atm.cashbox.picker.BanknotePicker;
 import by.dm13y.study.atm.cashbox.picker.BanknotePickerImpl;
-import by.dm13y.study.atm.diplay.Display;
+import by.dm13y.study.atm.display.Display;
 import by.dm13y.study.atm.money.Banknote;
 import by.dm13y.study.atm.pinpad.PinPadImpl;
 import by.dm13y.study.atm.pinpad.Pinpad;

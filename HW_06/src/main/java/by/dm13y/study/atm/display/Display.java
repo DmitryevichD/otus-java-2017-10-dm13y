@@ -1,4 +1,4 @@
-package by.dm13y.study.atm.diplay;
+package by.dm13y.study.atm.display;
 
 import java.util.List;
 
