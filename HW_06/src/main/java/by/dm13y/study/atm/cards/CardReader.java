@@ -14,17 +14,15 @@ public abstract class CardReader extends Observable {
             setChanged();
             notifyObservers(card);
         }
-
     }
 
     public void enable(){
         isEnabled = true;
     }
 
-    public void disable(){
+    public void blockReader(){
         isEnabled = false;
     }
-
 
     abstract void processCard(Card card);
 
