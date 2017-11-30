@@ -13,7 +13,7 @@ import by.dm13y.study.atm.printer.Printer;
 
 import java.util.*;
 
-public class ATMFacade implements Observer {
+public class ATM implements Observer {
     private final int COUNT_PIN_ATTEMPTS = 3;
     private final Map<Integer, Command> commands;
     private final List<String> displayListCommands;
@@ -25,8 +25,8 @@ public class ATMFacade implements Observer {
     private Pinpad pinpad;
     private Printer printer;
 
-    public ATMFacade(Bank bank, CashBox cashBox, Display display, Pinpad pinpad, Printer printer,
-                     CardReader cardReader, CashService cashService, Map<Integer, Command> commands) {
+    public ATM(Bank bank, CashBox cashBox, Display display, Pinpad pinpad, Printer printer,
+               CardReader cardReader, CashService cashService, Map<Integer, Command> commands) {
         this.bank = bank;
         this.cashBox = cashBox;
         this.display = display;

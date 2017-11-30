@@ -1,4 +1,4 @@
-import by.dm13y.study.atm.atm.ATMFacade;
+import by.dm13y.study.atm.atm.ATM;
 import by.dm13y.study.atm.atm.operations.*;
 import by.dm13y.study.atm.bank.Bank;
 import by.dm13y.study.atm.bank.BankImpl;
@@ -14,17 +14,19 @@ import by.dm13y.study.atm.cashbox.CashCartridgeImpl;
 import by.dm13y.study.atm.cashbox.picker.BanknotePicker;
 import by.dm13y.study.atm.cashbox.picker.BanknotePickerImpl;
 import by.dm13y.study.atm.display.Display;
+import by.dm13y.study.atm.display.DisplayImpl;
 import by.dm13y.study.atm.money.Banknote;
 import by.dm13y.study.atm.pinpad.PinPadImpl;
 import by.dm13y.study.atm.pinpad.Pinpad;
 import by.dm13y.study.atm.printer.Printer;
+import by.dm13y.study.atm.printer.PrinterImpl;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class StartATM {
-    private static ATMFacade atm;
+    private static ATM atm;
     private static CardReader cardReader;
     private static CashService cashService;
 
@@ -49,17 +51,17 @@ public class StartATM {
 
         Bank bank = new BankImpl();
 
-        Display display = new Display(){};
+        Display display = new DisplayImpl();
 
         Pinpad pinpad = new PinPadImpl(System.in);
 
-        Printer printer = new Printer(){};
+        Printer printer = new PrinterImpl();
 
         cardReader = new SimpleCardReader();
 
         cashService = new CashServiceImpl(Arrays.asList(Banknote.values()));
 
-        atm = new ATMFacade(bank, cashBox, display, pinpad, printer,
+        atm = new ATM(bank, cashBox, display, pinpad, printer,
                 cardReader, cashService, commands);
 
         Card card = new Card() {
