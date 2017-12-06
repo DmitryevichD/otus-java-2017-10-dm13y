@@ -17,27 +17,44 @@ import java.util.Map;
 import java.util.Observable;
 
 public class DepATM extends ATM {
-    private CashBox cashBox;
-    private MementoATM sourceState;
+    private final MementoATM originalState;
 
     public DepATM(Bank bank, CashBox cashBox, Display display, Pinpad pinpad, Printer printer, CardReader cardReader, CashService cashService, Map<Integer, Command> commands) {
         super(bank, cashBox, display, pinpad, printer, cardReader, cashService, commands);
-        this.cashBox = cashBox;
+        originalState = getCurrentState();
     }
 
-    public Money getCurrentRest(){
-        return cashBox.restMoney();
+    public MementoATM getCurrentState(){
+        return new MementoATM(cashBox);
+    } 
+    
+    private void restoreState(MementoATM mementoATM){
+        cashBox = mementoATM.getCashBox();
     }
 
-    public void resetATMState(Object arg){
-        throw new UnsupportedOperationException();
+    private void setOriginalState(){
+        restoreState(originalState);
+    }
+
+    private void setATMState(Object memento){
+        if (memento != null) {
+            if (memento instanceof MementoATM) {
+                restoreState(((MementoATM) memento));
+            }
+        }else {
+            setOriginalState();
+        }
+    }
+
+    public void withdrawMoney(Money money) {
+        cashBox.getBanknotes(money);
     }
 
     @Override
     public void update(Observable observable, Object arg) {
         if (observable != null) {
             if (observable instanceof Department) {
-                resetATMState(arg);
+                setATMState(arg);
             }
         }
     }
