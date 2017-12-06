@@ -8,6 +8,7 @@ import by.dm13y.study.atm.cards.CardReader;
 import by.dm13y.study.atm.cashService.CashService;
 import by.dm13y.study.atm.cashbox.CashBox;
 import by.dm13y.study.atm.display.Display;
+import by.dm13y.study.atm.money.Money;
 import by.dm13y.study.atm.pinpad.Pinpad;
 import by.dm13y.study.atm.printer.Printer;
 
@@ -92,6 +93,10 @@ public class ATM implements Observer {
                 cardReader.returnCard();
             }
         }
+    }
+
+    public Money getRest(){
+        return cashBox.restMoney();
     }
 
     private boolean isCorrectPin(Card card) {
