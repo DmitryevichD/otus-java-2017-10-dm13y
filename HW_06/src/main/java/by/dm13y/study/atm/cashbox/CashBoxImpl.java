@@ -4,10 +4,7 @@ import by.dm13y.study.atm.money.Banknote;
 import by.dm13y.study.atm.money.Money;
 import by.dm13y.study.atm.cashbox.picker.BanknotePicker;
 import by.dm13y.study.atm.money.MoneyUtils;
-
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class CashBoxImpl implements CashBox {
     private final Map<Banknote, CashCartridge> cartridgeBox;
@@ -17,6 +14,15 @@ public class CashBoxImpl implements CashBox {
         this.banknotePicker = banknotePicker;
         this.cartridgeBox = new TreeMap<>(banknotePicker.comparator());
         cartridgeBox.putAll(cashCartridges);
+    }
+
+    public CashBoxImpl(CashBoxImpl cashBox) {
+        banknotePicker = cashBox.banknotePicker;
+        cartridgeBox = new TreeMap<>(banknotePicker.comparator());
+        cashBox.cartridgeBox.forEach((banknote, cartridge) -> {
+            CashCartridgeImpl newCartridge = new CashCartridgeImpl(((CashCartridgeImpl) cartridge));
+            cartridgeBox.put(banknote, newCartridge);
+        });
     }
 
     @Override
@@ -41,8 +47,8 @@ public class CashBoxImpl implements CashBox {
     @Override
     public Money restMoney() {
         Money totalSum = new Money();
-        for (Map.Entry<Banknote, CashCartridge> cartrige : cartridgeBox.entrySet()) {
-            totalSum = MoneyUtils.add(totalSum, cartrige.getKey(), cartrige.getValue().countBanknote());
+        for (Map.Entry<Banknote, CashCartridge> cartridge : cartridgeBox.entrySet()) {
+            totalSum = MoneyUtils.add(totalSum, cartridge.getKey(), cartridge.getValue().countBanknote());
         }
         return totalSum;
     }

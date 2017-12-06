@@ -2,7 +2,6 @@ package by.dm13y.study.atm.cashbox;
 
 import by.dm13y.study.atm.money.Banknote;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,6 +17,10 @@ public class CashCartridgeImpl implements CashCartridge {
         this.maxCount = max;
         this.nominal = nominal;
         this.count = count;
+    }
+
+    public CashCartridgeImpl(CashCartridgeImpl cartridge) throws UnsupportedOperationException{
+        this(cartridge.nominal, cartridge.maxCount, cartridge.count);
     }
 
     @Override

@@ -15,16 +15,15 @@ import by.dm13y.study.atm.printer.Printer;
 import java.util.*;
 
 public class ATM implements Observer {
-    private final int COUNT_PIN_ATTEMPTS = 3;
     private final Map<Integer, Command> commands;
     private final List<String> displayListCommands;
-    private Bank bank;
-    private CardReader cardReader;
-    private CashService cashService;
-    private CashBox cashBox;
-    private Display display;
-    private Pinpad pinpad;
-    private Printer printer;
+    private final Bank bank;
+    private final CardReader cardReader;
+    private final CashService cashService;
+    protected CashBox cashBox;
+    private final Display display;
+    private final Pinpad pinpad;
+    private final Printer printer;
 
     public ATM(Bank bank, CashBox cashBox, Display display, Pinpad pinpad, Printer printer,
                CardReader cardReader, CashService cashService, Map<Integer, Command> commands) {
@@ -46,7 +45,7 @@ public class ATM implements Observer {
         display.showHeader();
     }
 
-    public void selectOperation(Account account){
+    private void selectOperation(Account account){
         while (true) {
             display.showList(displayListCommands);
             try {
@@ -100,6 +99,7 @@ public class ATM implements Observer {
     }
 
     private boolean isCorrectPin(Card card) {
+        int COUNT_PIN_ATTEMPTS = 3;
         for (int i = 0; i < COUNT_PIN_ATTEMPTS; i++) {
             display.showInputMessage("Input pin");
             try {
