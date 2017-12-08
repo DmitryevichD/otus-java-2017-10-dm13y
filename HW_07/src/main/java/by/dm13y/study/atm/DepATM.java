@@ -36,13 +36,11 @@ public class DepATM extends ATM {
         restoreState(originalState);
     }
 
-    private void setATMState(Object memento){
-        if (memento != null) {
-            if (memento instanceof MementoATM) {
-                restoreState(((MementoATM) memento));
-            }
-        }else {
+    private void setATMState(MementoATM memento){
+        if (memento == null) {
             setOriginalState();
+        }else {
+            setATMState(memento);
         }
     }
 
@@ -54,7 +52,7 @@ public class DepATM extends ATM {
     public void update(Observable observable, Object arg) {
         if (observable != null) {
             if (observable instanceof Department) {
-                setATMState(arg);
+                setATMState((MementoATM)arg);
             }
         }
     }
