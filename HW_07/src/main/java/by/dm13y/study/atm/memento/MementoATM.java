@@ -7,7 +7,7 @@ public class MementoATM {
     private final CashBox cashBox;
 
     public MementoATM(CashBox cashBox){
-        this.cashBox = new CashBoxImpl(((CashBoxImpl) cashBox));
+        this.cashBox = new CashBoxImpl(cashBox);
     }
 
     public CashBox getCashBox(){

@@ -16,10 +16,10 @@ public class CashBoxImpl implements CashBox {
         cartridgeBox.putAll(cashCartridges);
     }
 
-    public CashBoxImpl(CashBoxImpl cashBox) {
-        banknotePicker = cashBox.banknotePicker;
+    public CashBoxImpl(CashBox cashBox) {
+        banknotePicker = cashBox.getBanknotePicker();
         cartridgeBox = new TreeMap<>(banknotePicker.comparator());
-        cashBox.cartridgeBox.forEach((banknote, cartridge) -> {
+        cashBox.getCartridgeBox().forEach((banknote, cartridge) -> {
             CashCartridgeImpl newCartridge = new CashCartridgeImpl(((CashCartridgeImpl) cartridge));
             cartridgeBox.put(banknote, newCartridge);
         });
@@ -57,4 +57,16 @@ public class CashBoxImpl implements CashBox {
     public boolean isSupported(Banknote banknote) {
         return cartridgeBox.get(banknote) != null;
     }
+
+    @Override
+    public Map<Banknote, CashCartridge> getCartridgeBox() {
+        return cartridgeBox;
+    }
+
+    @Override
+    public BanknotePicker getBanknotePicker() {
+        return banknotePicker;
+    }
+
+
 }
