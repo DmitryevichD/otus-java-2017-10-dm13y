@@ -11,10 +11,8 @@ import by.dm13y.study.atm.memento.MementoATM;
 import by.dm13y.study.atm.money.Money;
 import by.dm13y.study.atm.pinpad.Pinpad;
 import by.dm13y.study.atm.printer.Printer;
-import by.dm13y.study.department.Department;
 
 import java.util.Map;
-import java.util.Observable;
 
 public class DepATM extends ATM {
     private final MementoATM originalState;
@@ -32,30 +30,15 @@ public class DepATM extends ATM {
         cashBox = mementoATM.getCashBox();
     }
 
-    private void setOriginalState(){
-        restoreState(originalState);
-    }
-
-    private void setATMState(Object memento){
-        if (memento != null) {
-            if (memento instanceof MementoATM) {
-                restoreState(((MementoATM) memento));
-            }
-        }else {
-            setOriginalState();
-        }
-    }
-
     public void withdrawMoney(Money money) {
         cashBox.getBanknotes(money);
     }
 
-    @Override
-    public void update(Observable observable, Object arg) {
-        if (observable != null) {
-            if (observable instanceof Department) {
-                setATMState(arg);
-            }
+    public void setState(MementoATM mementoATM) {
+        if (mementoATM == null) {
+            restoreState(originalState);
+        }else {
+            restoreState(mementoATM);
         }
     }
 }

@@ -11,10 +11,11 @@ import by.dm13y.study.atm.display.Display;
 import by.dm13y.study.atm.money.Money;
 import by.dm13y.study.atm.pinpad.Pinpad;
 import by.dm13y.study.atm.printer.Printer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class ATM implements Observer {
+public class ATM implements ATMCardObserver {
     private final Map<Integer, Command> commands;
     private final List<String> displayListCommands;
     private final Bank bank;
@@ -36,7 +37,7 @@ public class ATM implements Observer {
         this.commands = commands;
         this.cashService = cashService;
 
-        cardReader.addATMObserver(this);
+        cardReader.addATM(this);
         cardReader.enable();
 
         displayListCommands = new ArrayList<>();
@@ -66,7 +67,6 @@ public class ATM implements Observer {
         }
     }
 
-
     private void processCard(Card card) {
         Account account = bank.getAccount(card.getNumber());
         if (account == null) {
@@ -77,20 +77,16 @@ public class ATM implements Observer {
         selectOperation(account);
     }
 
+
     @Override
-    public void update(Observable observable, Object arg) {
-        if (arg == null) {return;}
-        if (cardReader == null) {return;}
-        if((observable instanceof CardReader) && (arg instanceof Card)){
-            Card currentCard = (Card) arg;
-            display.showInfo("Thanks. Your card number is " +currentCard.getNumber() + "\nCheat(pin)>>>>" + currentCard.getPin()+ "<<<<\n");
-            if (isCorrectPin(currentCard)) {
-                cardReader.blockReader();
-                processCard(currentCard);
-            }else {
-                display.showInfo("INPUT YOUR CARD\n");
-                cardReader.returnCard();
-            }
+    public void update(@NotNull Card card) {
+        display.showInfo("Thanks. Your card number is " +card.getNumber() + "\nCheat(pin)>>>>" + card.getPin()+ "<<<<\n");
+        if (isCorrectPin(card)) {
+            cardReader.blockReader();
+            processCard(card);
+        }else {
+            display.showInfo("INPUT YOUR CARD\n");
+            cardReader.returnCard();
         }
     }
 

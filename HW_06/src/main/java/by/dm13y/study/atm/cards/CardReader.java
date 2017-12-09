@@ -1,19 +1,28 @@
 package by.dm13y.study.atm.cards;
 
-import java.util.Observable;
-import java.util.Observer;
+import by.dm13y.study.atm.atm.ATM;
+import by.dm13y.study.atm.atm.ATMCardObserver;
+import by.dm13y.study.atm.atm.ATMObservableCard;
 
-public abstract class CardReader extends Observable {
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class CardReader implements ATMObservableCard {
+    private List<ATMCardObserver> atms = new ArrayList<>();
     private boolean isEnabled = false;
 
-    public void addATMObserver(Observer observer){
-        addObserver(observer);
+
+    public void addATM(ATMCardObserver atm){
+        atms.add(atm);
     }
-    protected void notifyATM(Card card){
-        if(isEnabled) {
-            setChanged();
-            notifyObservers(card);
-        }
+    public void remATM(ATMCardObserver atm){
+        atms.remove(atm);
+    }
+
+    @Override
+    public void update(Card card){
+        if(isEnabled)
+            atms.forEach(atm -> atm.update(card));
     }
 
     public void enable(){

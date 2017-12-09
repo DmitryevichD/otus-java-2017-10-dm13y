@@ -1,20 +1,20 @@
 package by.dm13y.study.department.impl;
 
+import by.dm13y.study.atm.DepATM;
 import by.dm13y.study.atm.memento.CaretakerATM;
 import by.dm13y.study.atm.money.Money;
 import by.dm13y.study.atm.money.MoneyUtils;
 import by.dm13y.study.department.Department;
-import by.dm13y.study.atm.DepATM;
+
 import java.util.*;
 
-public class DepartmentImpl extends Observable implements Department {
+public class DepartmentImpl implements Department {
     private final List<DepATM> atms;
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private final Map<DepATM, CaretakerATM> states = new HashMap<>();
 
     public DepartmentImpl(List<DepATM> atms) {
         this.atms = atms;
-        atms.forEach(this::addObserver);
         atms.forEach(atm -> {
             CaretakerATM caretakerATM = new CaretakerATM();
             caretakerATM.setMementoATM(atm.getCurrentState());
@@ -33,8 +33,7 @@ public class DepartmentImpl extends Observable implements Department {
 
     @Override
     public void resetAllATM() {
-        setChanged();
-        notifyObservers(null);
+        atms.forEach(atm -> atm.setState(null));
     }
 
     public List<DepATM> getAtms() {

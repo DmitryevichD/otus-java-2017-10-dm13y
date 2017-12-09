@@ -5,7 +5,7 @@ public class SimpleCardReader extends CardReader {
     public void processCard(Card card) {
         if(card != null){
             if(card.getNumber() > 0){
-                notifyATM(card);
+                update(card);
             }
         }
     }
