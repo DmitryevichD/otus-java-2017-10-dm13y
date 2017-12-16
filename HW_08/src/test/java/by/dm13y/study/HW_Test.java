@@ -24,4 +24,11 @@ public class HW_Test {
         assertTrue(serializeObject.equals(testClass));
     }
 
+    @Test
+    public void nullValue() throws Exception {
+        String gsonResult = new Gson().toJson(null);
+        String result = new JsonMaker().toJson(null);
+        assertEquals(gsonResult, result);
+    }
+
 }

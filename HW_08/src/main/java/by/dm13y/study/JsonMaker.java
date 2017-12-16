@@ -60,6 +60,7 @@ public class JsonMaker {
     }
 
     public String toJson(Object obj) throws Exception{
+        if (obj == null) { return "null";}
         JsonWriter jw = new JsonWriter();
         write(obj, obj.getClass(), jw);
         return jw.toString();
