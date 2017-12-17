@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+    <changeSet id="tag-1.1" author="dm13y" context="hw_09">
+        <tagDatabase tag="1.1"/>
+    </changeSet>
+    <changeSet id="add_data_for_test" author="dm13y" context="hw_09">
+        <loadData tableName="user" file="src/test/resources/liquibase/test_data/UserTestData01.csv">
+            <column name="id" type="NUMERIC"/>
+            <column name="name" type="STRING"/>
+            <column name="age" type="NUMERIC"/>
+        </loadData>
+        <rollback>
+            <delete tableName="user">
+                <where>name LIKE 'test'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
