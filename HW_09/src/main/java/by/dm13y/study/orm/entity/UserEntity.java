@@ -1,16 +1,14 @@
 package by.dm13y.study.orm.entity;
 
 import by.dm13y.study.annotations.Column;
+import by.dm13y.study.annotations.Id;
+import by.dm13y.study.annotations.Table;
 
-public class UserEntity extends DataSet {
-    private final static String tableName = "user";
-    private final static String idColumnName = "id";
-
-    public UserEntity(long id, String name, int age) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-    }
+@Table(name = "user")
+public class UserEntity implements Entity {
+    @Id
+    @Column(name = "id")
+    private Long id;
 
     @Column(name = "NAME")
     private String name;
@@ -18,16 +16,16 @@ public class UserEntity extends DataSet {
     @Column(name = "AGE")
     private int age;
 
-    @Override
-    public String getTableName() {
-        return tableName;
+    public UserEntity(Long id, String name, int age) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
     }
 
-    @Override
-    public String getIdColumnName() {
-        return idColumnName;
+    public UserEntity(String name, int age){
+        this.age = age;
+        this.name = name;
     }
-
 
     public String getName() {
         return name;
@@ -43,5 +41,15 @@ public class UserEntity extends DataSet {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
     }
 }
