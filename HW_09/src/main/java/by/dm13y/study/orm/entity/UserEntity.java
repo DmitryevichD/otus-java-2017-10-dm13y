@@ -16,17 +16,6 @@ public class UserEntity implements Entity {
     @Column(name = "AGE")
     private int age;
 
-    public UserEntity(Long id, String name, int age) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-    }
-
-    public UserEntity(String name, int age){
-        this.age = age;
-        this.name = name;
-    }
-
     public String getName() {
         return name;
     }

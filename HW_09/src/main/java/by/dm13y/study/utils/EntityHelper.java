@@ -20,7 +20,7 @@ public final class EntityHelper {
             Column column = field.getAnnotation(Column.class);
             if (column != null) {
                 try {
-                    columns.add(new EntityColumn(column.name(), field.get(entity), field.getType()));
+                    columns.add(new EntityColumn(column.name(), field.get(entity)));
                 } catch (IllegalAccessException ex) {
                     ex.printStackTrace();
                 }
@@ -28,6 +28,7 @@ public final class EntityHelper {
         }
         return columns;
     }
+
 
     @SuppressWarnings("unchecked")
     public static <T extends Entity> EntityColumn getId(T entity)  {
@@ -38,7 +39,7 @@ public final class EntityHelper {
             Id id_column = field.getAnnotation(Id.class);
             if (id_column != null) {
                 try {
-                    id = new EntityColumn(field.getAnnotation(Column.class).name(), field.get(entity), field.getType());
+                    id = new EntityColumn(field.getAnnotation(Column.class).name(), field.get(entity));
                     break;
                 } catch (IllegalAccessException ex) {
                     ex.printStackTrace();
@@ -48,8 +49,8 @@ public final class EntityHelper {
         return id;
     }
 
-    public static  <T extends Entity> String getTableName(T entity) {
-        Table table = entity.getClass().getAnnotation(Table.class);
+    public static  <T extends Entity> String getTableName(Class<T> clazz) {
+        Table table = clazz.getAnnotation(Table.class);
         return table.schema() + "." + table.name();
     }
 }

@@ -5,23 +5,43 @@ import by.dm13y.study.orm.entity.UserEntity;
 import java.sql.Connection;
 
 public class UsersDAO {
-    private final Connection connection;
-    private Executor executor;
+    private final Executor executor;
 
-    public UsersDAO(Connection session){
-        this.connection = session;
+    public UsersDAO(Connection connection){
+        this.executor = new Executor(connection);
     }
 
-    public UserEntity get(long id){
-        throw new UnsupportedOperationException();
+    public UserEntity getUser(Long id){
+        try {
+            return executor.load(id, UserEntity.class);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
-    public void update(UserEntity entity) {
-        executor.update(entity);
+    public void updateUser(UserEntity user) {
+        try {
+            executor.update(user);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 
-    public void save(UserEntity user){
-        executor.save(user);
+    public void saveUser(UserEntity user){
+        try {
+            executor.save(user);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void removeUser(UserEntity user){
+        try {
+            executor.remove(user);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
