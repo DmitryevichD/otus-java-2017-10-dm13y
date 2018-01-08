@@ -2,12 +2,13 @@ package by.dm13y.study.orm.entity;
 
 import lombok.*;
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "address", schema = "public")
-public class Address {
+public class Address implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Getter @Setter
     @Column(name="id", nullable = false, updatable = false)
     private long id;

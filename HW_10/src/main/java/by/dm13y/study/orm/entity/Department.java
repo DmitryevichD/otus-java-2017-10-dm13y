@@ -2,14 +2,17 @@ package by.dm13y.study.orm.entity;
 
 import lombok.*;
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "department", schema = "public")
-public class Department {
+public class Department implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Getter @Setter
     @Column(name = "id", unique = true, nullable = false)
     private long id;
@@ -19,8 +22,8 @@ public class Department {
     private String name;
 
     @Getter @Setter
-    @OneToMany(mappedBy = "department")
-    public Set<User> usersList;
+    @OneToMany(mappedBy = "dep")
+    private List<User> users = new ArrayList<>();
 
     public Department(String name) {
         this.name = name;
