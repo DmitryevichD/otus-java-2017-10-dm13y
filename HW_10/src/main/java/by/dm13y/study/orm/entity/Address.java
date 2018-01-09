@@ -6,18 +6,16 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "address", schema = "public")
+@NoArgsConstructor
 public class Address implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Getter @Setter
     @Column(name="id", nullable = false, updatable = false)
-    private long id;
+    @Getter @Setter private long id;
 
-    @Getter @Setter
     @Column(name="street", nullable = false, updatable = false)
-    private String street;
+    @Getter @Setter private String street;
 
-    public Address(){}
     public Address(String street) {
         this.street = street;
     }

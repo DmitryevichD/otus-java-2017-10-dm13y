@@ -36,7 +36,7 @@ public class HW_Test {
 
         Phone phoneTree = new Phone(phone3, user);
         dbService.save(phoneTree);
-        assertEquals("Check address", dbService.getAddress(streetName).getStreet(), streetName);
+        assertEquals("Check address", dbService.getAddress(streetName).get(0).getStreet(), streetName);
 
         Phone usr_phoneOne = dbService.getPhone(phone1);
         assertEquals("check phone 1", usr_phoneOne.getNumber(), phone1);
@@ -49,7 +49,7 @@ public class HW_Test {
         Phone usr_phoneTree = dbService.getPhone(phone3);
         assertEquals("check phone 2", usr_phoneTree.getNumber(), phone3);
         assertEquals("check user name in phone2", usr_phoneTree.getUser().getName(), userName);
-
+        dbService.refresh(user);
         Set<Phone> phones = dbService.getUser(user.getId()).getPhones();
         assertFalse(phones.isEmpty());
 
@@ -59,8 +59,9 @@ public class HW_Test {
 
         assertTrue(phoneList.contains(phone1));
         assertTrue(phoneList.contains(phone2));
-        //todo:flush or open - close entity manger (em scope)
         assertTrue(phoneList.contains(phone3));
+        dbService.remove(user);
+        dbService.closeService();
     }
 }
 
