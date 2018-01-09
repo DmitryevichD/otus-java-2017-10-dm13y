@@ -8,7 +8,6 @@
             persistence unit for HW_10
         </description>
         <class>by.dm13y.study.orm.entity.User</class>
-        <class>by.dm13y.study.orm.entity.Department</class>
         <class>by.dm13y.study.orm.entity.Address</class>
         <class>by.dm13y.study.orm.entity.Phone</class>
         <properties>
@@ -18,6 +17,7 @@
             <property name="javax.persistence.jdbc.password" value="hw_10"/>
 
             <property name="hibernate.show_sql" value="true"/>
+            <!--<property name="hibernate.hbm2ddl.auto" value="validate"/>-->
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
         </properties>
     </persistence-unit>

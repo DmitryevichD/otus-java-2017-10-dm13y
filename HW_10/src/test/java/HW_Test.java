@@ -1,5 +1,4 @@
 import by.dm13y.study.orm.entity.Address;
-import by.dm13y.study.orm.entity.Department;
 import by.dm13y.study.orm.entity.Phone;
 import by.dm13y.study.orm.entity.User;
 import by.dm13y.study.orm.service.DBService;
@@ -8,90 +7,60 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.persistence.Persistence;
-import javax.persistence.PersistenceUnit;
 import javax.persistence.PersistenceUtil;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class HW_Test {
-    private static DBService dbService;
-    private PersistenceUtil util = Persistence.getPersistenceUtil();
-
-    @BeforeClass
-    public static void entityManager(){
-        dbService = new DBServiceHibImpl();
-    }
 
     @Test
-    public void HW_10Test() throws Exception{
-        final String userName = "test_user";
-        final String streetName = "test_street";
-        final String phone1 = "number1";
-        final String phone2 = "number2";
-        final String department = "default_department";
+    public void HW_10Test() throws Exception {
+        DBService dbService = new DBServiceHibImpl();
+        final String userName = "strUsername";
+        final String streetName = "strStreet";
+        final String phone1 = "strNumber1";
+        final String phone2 = "strNumber2";
+        final String phone3 = "strNumber3";
 
         Address address = new Address(streetName);
-        Phone phoneOne = new Phone(phone1);
-        Phone phoneTwo = new  Phone(phone2);
-        Department dep = new Department(department);
 
-
-
-
-        User user = new User(userName, 27,
-                address,
-                phoneOne,
-                dep);
-
+        User user = new User(userName, 27, address);
+        user.addPhone(phone1);
+        user.addPhone(phone2);
         dbService.save(user);
 
-        assertTrue(util.isLoaded(address));
-        assertTrue(util.isLoaded(phoneOne));
-        assertTrue(util.isLoaded(phoneTwo));
-        assertTrue(util.isLoaded(dep));
-        assertTrue(util.isLoaded(user));
+        Phone phoneTree = new Phone(phone3, user);
+        dbService.save(phoneTree);
+        assertEquals("Check address", dbService.getAddress(streetName).getStreet(), streetName);
 
-        assertTrue(util.isLoaded(user));
+        Phone usr_phoneOne = dbService.getPhone(phone1);
+        assertEquals("check phone 1", usr_phoneOne.getNumber(), phone1);
+        assertEquals("check user name in phone1", usr_phoneOne.getUser().getName(), userName);
 
-        assertEquals(dbService.getAddress(streetName).getStreet(), streetName);
-        assertEquals(dbService.getPhone(phone1).getNumber(), phone1);
-        assertNull(dbService.getPhone(phone2));
+        Phone usr_phoneTwo = dbService.getPhone(phone2);
+        assertEquals("check phone 2", usr_phoneTwo.getNumber(), phone2);
+        assertEquals("check user name in phone2", usr_phoneTwo.getUser().getName(), userName);
 
-        user.getPhones().add(new Phone(phone2));
-        dbService.save(user);
-        assertEquals(dbService.getPhone(phone2).getNumber(), phone2);
+        Phone usr_phoneTree = dbService.getPhone(phone3);
+        assertEquals("check phone 2", usr_phoneTree.getNumber(), phone3);
+        assertEquals("check user name in phone2", usr_phoneTree.getUser().getName(), userName);
 
-        List<User> users = dbService.getUsersByName(userName);
-        assertFalse(users.isEmpty());
-        users.forEach(usr -> assertTrue(usr.getPhones().size() == 2));
-        users.forEach(usr -> assertTrue(usr.getDep().getName().equals(department)));
+        Set<Phone> phones = dbService.getUser(user.getId()).getPhones();
+        assertFalse(phones.isEmpty());
 
+        List<String> phoneList = phones.stream()
+                .map(ph -> ph.getNumber())
+                .collect(Collectors.toList());
 
-        Department depFromDB = dbService.getDepartment(department);
-        assertEquals(depFromDB.getName(), department);
-        List<User> depUsers = depFromDB.getUsers();
-
-        assertFalse(depUsers.isEmpty());
-//        assertTrue(dbService.getDepartment(department).getUsersList().contains(user));
-
-
-
+        assertTrue(phoneList.contains(phone1));
+        assertTrue(phoneList.contains(phone2));
+        //todo:flush or open - close entity manger (em scope)
+        assertTrue(phoneList.contains(phone3));
     }
-
-//    @Test
-//    public void phoneTest(){
-//        String tst_phone = "test_phone";
-//        assertNull(dbService.getAddress(tst_phone));
-//
-//        Phone phone = new Phone(tst_phone);
-//        dbService.save(phone);
-//        Phone store_phone = dbService.getPhone(tst_phone);
-//        assertEquals(store_phone.getNumber(), tst_phone);
-//
-//        dbService.remove(tst_phone);
-//        assertNull(dbService.getPhone(tst_phone));
-//    }
 }
+

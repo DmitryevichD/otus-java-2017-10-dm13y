@@ -17,6 +17,7 @@ public class Address implements Serializable {
     @Column(name="street", nullable = false, updatable = false)
     private String street;
 
+    public Address(){}
     public Address(String street) {
         this.street = street;
     }

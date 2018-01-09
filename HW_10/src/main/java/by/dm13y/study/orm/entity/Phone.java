@@ -1,9 +1,10 @@
 package by.dm13y.study.orm.entity;
 
 
-import javax.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -16,11 +17,18 @@ public class Phone implements Serializable{
     private long id;
 
     @Getter @Setter
-    @Column(name="number",nullable = false)
+    @Column(name="number",nullable = false, unique = true)
     private String number;
 
-    public Phone(String number) {
+    @Getter @Setter
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public Phone(){}
+    public Phone(String number, User user) {
         this.number = number;
+        this.user = user;
     }
 
 }
