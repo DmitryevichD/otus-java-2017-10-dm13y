@@ -20,6 +20,7 @@
         <module>HW_08</module>
         <module>HW_09</module>
         <module>HW_10</module>
+        <module>HW_11</module>
     </modules>
     <properties>
         <project.build.source>1.8</project.build.source>
@@ -46,6 +47,12 @@
                 <groupId>com.intellij</groupId>
                 <artifactId>annotations</artifactId>
                 <version>${jetbrains-annotations}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.16.18</version>
+                <scope>provided</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

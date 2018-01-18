@@ -20,4 +20,26 @@
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
         </properties>
     </persistence-unit>
+
+    <persistence-unit name="by.dm13y.study.hw_11">
+        <description>
+            persistence unit for HW_11
+        </description>
+        <class>by.dm13y.study.orm.entity.User</class>
+        <class>by.dm13y.study.orm.entity.Address</class>
+        <class>by.dm13y.study.orm.entity.Phone</class>
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/hw_10"/>
+            <property name="javax.persistence.jdbc.user" value="hw_10"/>
+            <property name="javax.persistence.jdbc.password" value="hw_10"/>
+
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.jcache.JCacheRegionFactory"/>
+            <property name="hibernate.javax.cache.provider" value="org.ehcache.jsr107.EhcacheCachingProvider"/>
+        </properties>
+    </persistence-unit>
 </persistence>

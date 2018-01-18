@@ -8,9 +8,13 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "usr", schema = "public")
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @NoArgsConstructor
 public class User implements Serializable {
     @Id
