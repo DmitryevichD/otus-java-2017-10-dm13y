@@ -4,7 +4,7 @@ import java.lang.ref.SoftReference;
 import java.util.*;
 
 public class CacheLRU<K, V> extends LinkedHashMap<K, SoftReference<V>> implements Cache<K,V>, CacheMXBean {
-    private static final int DEFAULT_CAPACITY = 100_000;
+    private static final int DEFAULT_CAPACITY = 8_000;
     private static final long DEFAULT_IDLE_TIME = 10_000;
     private static final long DEFAULT_LIFE_TIME = 10_000;
     private int hits;
@@ -115,6 +115,12 @@ public class CacheLRU<K, V> extends LinkedHashMap<K, SoftReference<V>> implement
         return val;
     }
 
+    @Override
+    public void remFromCache(K key) {
+        remove(key);
+        timeValues.remove(key);
+    }
+
     private boolean timeIsCorrect(K key){
         TimeRate timeRate = timeValues.get(key);
         return timeRate == null ? false : timeRate.isActive();
@@ -122,9 +128,11 @@ public class CacheLRU<K, V> extends LinkedHashMap<K, SoftReference<V>> implement
 
     @Override
     public void putToCache(K key, V value) {
-        SoftReference<V> sr = new SoftReference<V>(value);
-        put(key, sr);
-        timeValues.put(key, new TimeRate());
+        if (value != null) {
+            SoftReference<V> sr = new SoftReference<V>(value);
+            put(key, sr);
+            timeValues.put(key, new TimeRate());
+        }
     }
 
     private class TimeRate{
@@ -151,5 +159,14 @@ public class CacheLRU<K, V> extends LinkedHashMap<K, SoftReference<V>> implement
         private boolean isIdle(){
             return (timeMaker.getTimeInMillis() - idle) < timeToIdleMs;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Capacity:" + entryCapacity + "; " +
+                "Size:" + size() + "; " +
+                "Hits:" + hits + "; " +
+                "Miss:" + miss + "; " +
+                "Eviction:" + eviction;
     }
 }
