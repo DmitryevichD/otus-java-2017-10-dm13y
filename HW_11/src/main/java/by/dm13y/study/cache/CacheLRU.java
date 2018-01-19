@@ -115,6 +115,12 @@ public class CacheLRU<K, V> extends LinkedHashMap<K, SoftReference<V>> implement
         return val;
     }
 
+    @Override
+    public void remFromCache(K key) {
+        remove(key);
+        timeValues.remove(key);
+    }
+
     private boolean timeIsCorrect(K key){
         TimeRate timeRate = timeValues.get(key);
         return timeRate == null ? false : timeRate.isActive();
@@ -122,9 +128,11 @@ public class CacheLRU<K, V> extends LinkedHashMap<K, SoftReference<V>> implement
 
     @Override
     public void putToCache(K key, V value) {
-        SoftReference<V> sr = new SoftReference<V>(value);
-        put(key, sr);
-        timeValues.put(key, new TimeRate());
+        if (value != null) {
+            SoftReference<V> sr = new SoftReference<V>(value);
+            put(key, sr);
+            timeValues.put(key, new TimeRate());
+        }
     }
 
     private class TimeRate{
