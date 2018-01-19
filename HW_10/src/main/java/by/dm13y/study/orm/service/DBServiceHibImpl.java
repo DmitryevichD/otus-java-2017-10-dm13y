@@ -35,6 +35,7 @@ public class DBServiceHibImpl implements DBService{
         tx.commit();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<Address> getAddress(String street) {
         String query_str = "SELECT a FROM Address a WHERE a.street = :street";

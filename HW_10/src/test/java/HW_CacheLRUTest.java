@@ -1,20 +1,12 @@
 import by.dm13y.study.orm.entity.Address;
 import by.dm13y.study.orm.entity.User;
 import by.dm13y.study.orm.service.DBService;
-import by.dm13y.study.orm.service.DBServiceWithCache2LevelImpl;
 import by.dm13y.study.orm.service.DBServiceWithCacheLRUImpl;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-
-import static junit.framework.TestCase.assertNotSame;
 
 public class HW_CacheLRUTest {
     private DBService service;

@@ -45,6 +45,7 @@ public class DBServiceWithCacheLRUImpl implements DBService {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<Address> getAddress(String street) {
         String id = getQueryId(Address.class, street);
@@ -81,7 +82,7 @@ public class DBServiceWithCacheLRUImpl implements DBService {
 
     @Override
     public User getUser(long id) {
-        User user = (User)entityCache.getFromCache(new Long(id));
+        User user = (User)entityCache.getFromCache(id);
         if (user == null) {
             em.getTransaction();
             user = em.find(User.class, id);
@@ -93,7 +94,7 @@ public class DBServiceWithCacheLRUImpl implements DBService {
 
     private Long getEntityId(Object object){
         if (object == null) {
-            return 0l;
+            return 0L;
         }
         if(object instanceof User){
             return ((User)object).getId();
@@ -104,15 +105,11 @@ public class DBServiceWithCacheLRUImpl implements DBService {
         if(object instanceof Phone){
             return ((Phone)object).getId();
         }
-        return 0l;
+        return 0L;
     }
 
     public String getQuickEntityStatistic(){
         return entityCache.toString();
-    }
-
-    public String getQuickQueryStatistic(){
-        return queryCache.toString();
     }
 
     private String getQueryId(Class clazz, String queryParam){

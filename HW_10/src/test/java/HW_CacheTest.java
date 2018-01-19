@@ -1,17 +1,14 @@
 import by.dm13y.study.orm.entity.Address;
 import by.dm13y.study.orm.entity.User;
 import by.dm13y.study.orm.service.DBService;
-import by.dm13y.study.orm.service.DBServiceHibImpl;
 import by.dm13y.study.orm.service.DBServiceWithCache2LevelImpl;
-import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotSame;
-import static junit.framework.TestCase.assertTrue;
 
 public class HW_CacheTest {
-    private DBService service = new DBServiceWithCache2LevelImpl();
+    private final DBService service = new DBServiceWithCache2LevelImpl();
 
     @Test
     public void CacheTest() throws Exception {

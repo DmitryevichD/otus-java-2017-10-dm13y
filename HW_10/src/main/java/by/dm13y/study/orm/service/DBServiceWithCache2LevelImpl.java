@@ -3,10 +3,6 @@ package by.dm13y.study.orm.service;
 import by.dm13y.study.orm.entity.Address;
 import by.dm13y.study.orm.entity.Phone;
 import by.dm13y.study.orm.entity.User;
-import org.hibernate.Hibernate;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.loader.plan.spi.EntityFetch;
 
 import javax.persistence.*;
 import java.util.List;
@@ -51,6 +47,7 @@ public class DBServiceWithCache2LevelImpl implements DBService {
     public List<Address> getAddress(String street) {
         String query_str = "SELECT a FROM Address a WHERE a.street = :street";
         Query query = getEntityManager().createQuery(query_str).setParameter("street", street);
+        //noinspection unchecked
         return (List<Address>) query.getResultList();
     }
 

@@ -3,11 +3,8 @@ import by.dm13y.study.orm.entity.Phone;
 import by.dm13y.study.orm.entity.User;
 import by.dm13y.study.orm.service.DBService;
 import by.dm13y.study.orm.service.DBServiceHibImpl;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceUtil;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -54,7 +51,7 @@ public class HW_Test {
         assertFalse(phones.isEmpty());
 
         List<String> phoneList = phones.stream()
-                .map(ph -> ph.getNumber())
+                .map(Phone::getNumber)
                 .collect(Collectors.toList());
 
         assertTrue(phoneList.contains(phone1));

@@ -75,6 +75,7 @@ public class CacheLRU<K, V> extends LinkedHashMap<K, SoftReference<V>> implement
         return timeToIdleMs;
     }
 
+    @SuppressWarnings("SuspiciousMethodCalls")
     @Override
     public Date getTimeCreated(Long key) {
         try {
@@ -84,10 +85,11 @@ public class CacheLRU<K, V> extends LinkedHashMap<K, SoftReference<V>> implement
         }
     }
 
+    @SuppressWarnings("SuspiciousMethodCalls")
     @Override
     public Date getLastAccessTime(Long key) {
         try{
-        return new Date(timeValues.get(key).idle);
+            return new Date(timeValues.get(key).idle);
         }catch (Exception ex){
             return null;
         }
@@ -129,7 +131,7 @@ public class CacheLRU<K, V> extends LinkedHashMap<K, SoftReference<V>> implement
     @Override
     public void putToCache(K key, V value) {
         if (value != null) {
-            SoftReference<V> sr = new SoftReference<V>(value);
+            SoftReference<V> sr = new SoftReference<>(value);
             put(key, sr);
             timeValues.put(key, new TimeRate());
         }
