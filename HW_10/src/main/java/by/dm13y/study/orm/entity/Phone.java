@@ -8,10 +8,10 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
+@javax.persistence.Entity
 @Table(name = "phone", schema = "public")
 @NoArgsConstructor
-public class Phone implements Serializable{
+public class Phone implements Serializable, Entity{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name="id",nullable = false, updatable = false)

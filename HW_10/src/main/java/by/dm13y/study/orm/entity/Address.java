@@ -4,10 +4,10 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
+@javax.persistence.Entity
 @Table(name = "address", schema = "public")
 @NoArgsConstructor
-public class Address implements Serializable {
+public class Address implements Serializable, Entity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name="id", nullable = false, updatable = false)

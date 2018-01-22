@@ -3,6 +3,7 @@ package by.dm13y.study.orm.service;
 import by.dm13y.study.cache.Cache;
 import by.dm13y.study.cache.CacheLRU;
 import by.dm13y.study.orm.entity.Address;
+import by.dm13y.study.orm.entity.Entity;
 import by.dm13y.study.orm.entity.Phone;
 import by.dm13y.study.orm.entity.User;
 
@@ -96,14 +97,8 @@ public class DBServiceWithCacheLRUImpl implements DBService {
         if (object == null) {
             return 0L;
         }
-        if(object instanceof User){
-            return ((User)object).getId();
-        }
-        if(object instanceof Address){
-            return ((Address)object).getId();
-        }
-        if(object instanceof Phone){
-            return ((Phone)object).getId();
+        if(object instanceof Entity){
+            return ((Entity)object).getId();
         }
         return 0L;
     }

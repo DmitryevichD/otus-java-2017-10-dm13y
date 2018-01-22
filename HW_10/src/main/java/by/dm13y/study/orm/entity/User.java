@@ -11,12 +11,12 @@ import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-@Entity
+@javax.persistence.Entity
 @Table(name = "usr", schema = "public")
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @NoArgsConstructor
-public class User implements Serializable {
+public class User implements Serializable, Entity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name="id",nullable = false)
