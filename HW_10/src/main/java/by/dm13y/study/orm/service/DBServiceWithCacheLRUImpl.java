@@ -2,11 +2,14 @@ package by.dm13y.study.orm.service;
 
 import by.dm13y.study.cache.Cache;
 import by.dm13y.study.cache.CacheLRU;
+import by.dm13y.study.cache.MXBeanHelper;
 import by.dm13y.study.orm.entity.Address;
 import by.dm13y.study.orm.entity.Entity;
 import by.dm13y.study.orm.entity.Phone;
 import by.dm13y.study.orm.entity.User;
 
+import javax.management.MalformedObjectNameException;
+import javax.management.ObjectName;
 import javax.persistence.*;
 import java.util.List;
 
@@ -17,6 +20,11 @@ public class DBServiceWithCacheLRUImpl implements DBService {
 
     public DBServiceWithCacheLRUImpl(){
         em  = Persistence.createEntityManagerFactory("by.dm13y.study.hw_10").createEntityManager();
+    }
+
+    public DBServiceWithCacheLRUImpl(ObjectName mxBeanName) throws MalformedObjectNameException{
+        em  = Persistence.createEntityManagerFactory("by.dm13y.study.hw_10").createEntityManager();
+        MXBeanHelper.addCacheMXBean(entityCache, mxBeanName);
     }
 
     @Override
