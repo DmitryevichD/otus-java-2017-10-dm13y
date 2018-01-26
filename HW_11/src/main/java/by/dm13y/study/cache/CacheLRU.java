@@ -4,6 +4,7 @@ import java.lang.ref.SoftReference;
 import java.util.*;
 
 public class CacheLRU<K, V> extends LinkedHashMap<K, SoftReference<V>> implements Cache<K,V>, CacheMXBean {
+    public final static String CACHE_MXBEAN_OBJ_NAME = "by.dm13y.study.cache:type=CacheLRU";
     private static final int DEFAULT_CAPACITY = 8_000;
     private static final long DEFAULT_IDLE_TIME = 10_000;
     private static final long DEFAULT_LIFE_TIME = 10_000;
