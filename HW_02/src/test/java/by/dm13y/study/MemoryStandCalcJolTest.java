@@ -1,10 +1,5 @@
 package by.dm13y.study;
-
-import jdk.nashorn.internal.scripts.JO;
 import org.junit.Test;
-
-import static org.junit.Assert.assertTrue;
-
 public class MemoryStandCalcJolTest {
     @Test
     public void StringArrayTest() throws Exception{
