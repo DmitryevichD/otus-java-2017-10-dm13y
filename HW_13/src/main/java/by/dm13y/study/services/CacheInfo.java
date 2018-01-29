@@ -14,4 +14,6 @@ public interface CacheInfo {
     String getTimeToIdleMs();
 
     String getTimeToLiveMs();
+
+    String toJson();
 }
