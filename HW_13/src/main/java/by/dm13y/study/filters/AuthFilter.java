@@ -1,4 +1,4 @@
-package by.dm13y.study.filtres;
+package by.dm13y.study.filters;
 
 import by.dm13y.study.auth.User;
 

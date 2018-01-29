@@ -1,0 +1,42 @@
+<html>
+<head>
+    <title>HW13</title>
+    <script>
+        var ws;
+        function initWC() {
+            ws = new WebSocket("ws://localhost:8080/cacheinfo");
+            ws.onmessage = function (event) {
+                var cacheinfo = JSON.parse(event.data);
+                document.getElementById("miss").innerHTML = "Miss: " + cacheinfo.miss;
+                document.getElementById("hit").innerHTML = "Hit: " + cacheinfo.hit;
+                document.getElementById("capacity").innerHTML = "Capacity: " + cacheinfo.capacity;
+                document.getElementById("cachesize").innerHTML = "CacheSize: " + cacheinfo.cacheSize;
+                document.getElementById("eviction").innerHTML = "Eviction: " + cacheinfo.eviction;
+                document.getElementById("idletime").innerHTML = "Idle time (ms): " + cacheinfo.timeToIdle;
+                document.getElementById("lifetime").innerHTML = "Life time (ms): " + cacheinfo.timeToLive;
+            };
+        }
+
+        function sendCacheQuery(){
+            ws.send("getCacheInfo");
+        }
+
+        function init() {
+            initWC();
+            setInterval(function(){sendCacheQuery();}, 1000)
+        }
+
+    </script>
+
+    <body onload="init()">
+        <h2>LRU Cache info</h2>
+        <h4 id="miss">Miss: 0</h4>
+        <h4 id="hit">Hit: 0</h4>
+        <h4 id="capacity">Capacity: 0</h4>
+        <h4 id="cachesize">Cache size: 0</h4>
+        <h4 id="eviction">Eviction: 0</h4>
+        <h4 id="idletime">Idle time (ms): 0</h4>
+        <h4 id="lifetime">Life time (ms): 0</h4>
+
+    </body>
+</html>

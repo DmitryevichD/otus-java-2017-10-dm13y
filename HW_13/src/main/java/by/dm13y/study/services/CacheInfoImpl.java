@@ -12,10 +12,8 @@ public class CacheInfoImpl implements CacheInfo {
     private MBeanServer mBeanServer;
     @Autowired
     private ObjectName objectName;
-
-    private Gson gson = new Gson();
-
-    public CacheInfoImpl(){}
+    @Autowired
+    private Gson gson;
 
     private String attrVal(String name) {
         try {
@@ -25,47 +23,18 @@ public class CacheInfoImpl implements CacheInfo {
         }
     }
 
-    @Override
-    public String getHit(){
-        return attrVal("Hit");
-    }
-    @Override
-    public String getMis(){
-        return attrVal("Miss");
-    }
-    @Override
-    public String getEviction(){
-        return attrVal("Eviction");
-    }
-    @Override
-    public String getCapacity(){
-        return attrVal("Capacity");
-    }
-    @Override
-    public String getCacheSize(){
-        return attrVal("CacheSize");
-    }
-    @Override
-    public String getTimeToIdleMs(){
-        return attrVal("TimeToIdleMs");
-    }
-    @Override
-    public String getTimeToLiveMs(){
-        return attrVal("TimeToLiveMs");
-    }
-
     public String toJson(){
         return gson.toJson(new CacheInfo());
     }
 
     private class CacheInfo{
-        private String hit = getHit();
-        private String miss = getMis();
-        private String eviction = getEviction();
-        private String capacity = getCapacity();
-        private String cacheSize = getCacheSize();
-        private String timeToIdle = getTimeToIdleMs();
-        private String timeToLive = getTimeToLiveMs();
+        private String hit = attrVal("Hit");
+        private String miss = attrVal("Miss");
+        private String eviction = attrVal("Eviction");
+        private String capacity = attrVal("Capacity");
+        private String cacheSize = attrVal("CacheSize");
+        private String timeToIdle = attrVal("TimeToIdleMs");
+        private String timeToLive = attrVal("TimeToLiveMs");
 
 
     }

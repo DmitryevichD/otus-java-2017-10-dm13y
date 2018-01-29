@@ -66,7 +66,7 @@ public class CacheExecutor extends Thread{
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
-        };
+        }
 
     }
 }

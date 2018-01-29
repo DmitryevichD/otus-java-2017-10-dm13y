@@ -10,8 +10,6 @@ public class User {
     }
 
     public boolean isAdmin(){
-        if((login.equals("admin")) && (passw.equals(login))){
-            return true;
-        }else return false;
+        return (login.equals("admin")) && (passw.equals(login));
     }
 }
