@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>HW13</title>
     <script>
@@ -17,13 +18,9 @@
             };
         }
 
-        function sendCacheQuery(){
-            ws.send("getCacheInfo");
-        }
-
         function init() {
             initWC();
-            setInterval(function(){sendCacheQuery();}, 1000)
+            ws.open();
         }
 
     </script>
@@ -37,6 +34,5 @@
         <h4 id="eviction">Eviction: 0</h4>
         <h4 id="idletime">Idle time (ms): 0</h4>
         <h4 id="lifetime">Life time (ms): 0</h4>
-
     </body>
 </html>
