@@ -23,6 +23,7 @@
         <module>HW_11</module>
         <module>HW_12</module>
         <module>HW_13</module>
+        <module>HW_14</module>
     </modules>
     <properties>
         <project.build.source>1.8</project.build.source>

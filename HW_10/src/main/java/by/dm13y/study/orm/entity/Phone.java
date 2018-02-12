@@ -23,11 +23,11 @@ public class Phone implements Serializable, Entity{
     //bidirectional
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
-    @Getter @Setter private User user;
+    @Getter @Setter private User userrrrrr;
 
     public Phone(String number, User user) {
         this.number = number;
-        this.user = user;
+        this.userrrrrr = user;
     }
 
 }
