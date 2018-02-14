@@ -18,11 +18,19 @@ public class SubArraySorter<E> extends Thread {
 
     @Override
     public void run(){
-
+        doQuickSort(minIdx, maxIdx);
     }
 
     private void doBubbleSort(int start, int end) {
-        throw new UnsupportedOperationException();
+        for(int i = start; i <= end; i++){
+            for(int j = start + 1; j <= (start - i); j++) {
+                if(comparator.compare(array[i], array[j]) < 0) {
+                    E tmp = array[i];
+                    array[i] = array[j];
+                    array[j] = tmp;
+                }
+            }
+        }
     }
 
     private void  doQuickSort(int start, int end) {
@@ -43,7 +51,17 @@ public class SubArraySorter<E> extends Thread {
             while (j > cur && (comparator.compare(array[cur], array[j]) <= 0)) {
                 j--;
             }
-            //http://www.javenue.info/post/45
+            if (i < j) {
+                E tmp = array[i];
+                array[i] = array[j];
+                array[j] = tmp;
+                if (i == cur)
+                    cur = j;
+                else if (j == cur)
+                    cur = i;
+            }
         }
+            doQuickSort(start, cur);
+            doQuickSort(cur + 1, end);
     }
 }

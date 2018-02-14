@@ -10,6 +10,7 @@ public class ThreadSorter<E> implements Sorter<E> {
     private final int MIN_SUB_ARRAY_SIZE = 64;
     private final int COUNT_THREADS;
     private final Executor threadPool;
+    private volatile E[] innerArray;
 
     public ThreadSorter(){
         COUNT_THREADS = 1;
@@ -41,7 +42,7 @@ public class ThreadSorter<E> implements Sorter<E> {
         int countWorkers = getCountWorkers(list.size());
         int subArraySize = list.size() / countWorkers;
 
-        E[] innerArray = (E[])list.toArray();
+        innerArray = (E[])list.toArray();
         List<CompletableFuture<Void>> futures = new ArrayList<>();
 
         for (int i = 0; i < countWorkers; i++) {
@@ -59,7 +60,8 @@ public class ThreadSorter<E> implements Sorter<E> {
                 e.printStackTrace();
             }
         });
-
+        System.out.println(list);
+        System.out.println(innerArray);
         return null;
     }
 
