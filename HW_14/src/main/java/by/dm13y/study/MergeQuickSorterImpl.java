@@ -5,18 +5,18 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class MixedConcurrentSorterMgr<E> implements Sorter<E> {
+public class MergeQuickSorterImpl<E> implements Sorter<E> {
     private final int MIN_SUB_ARRAY_SIZE = 64;
     private final int COUNT_THREADS;
     private final Executor threadPool;
     private volatile E[] innerArray;
 
-    public MixedConcurrentSorterMgr(){
+    public MergeQuickSorterImpl(){
         COUNT_THREADS = 1;
         threadPool = Executors.newFixedThreadPool(COUNT_THREADS);
     }
 
-    public MixedConcurrentSorterMgr(int countThread) {
+    public MergeQuickSorterImpl(int countThread) {
         if (countThread < 1) {
             throw new IllegalArgumentException("argument must be greater than zero");
         }
@@ -28,13 +28,10 @@ public class MixedConcurrentSorterMgr<E> implements Sorter<E> {
         if (list.isEmpty()) {
             return false;
         }
-        if (list.size() == 1){
-            return false;
-        }
-        return true;
+        return list.size() != 1;
     }
 
-    public int getCountWorkers(int listSize) {
+    private int getCountWorkers(int listSize) {
         if (listSize < MIN_SUB_ARRAY_SIZE) {
             return 1;
         }
@@ -60,7 +57,7 @@ public class MixedConcurrentSorterMgr<E> implements Sorter<E> {
             int maxIdx = i == countWorkers - 1 ? innerArray.length - 1 : (i + 1) * subArraySize;
 
             Deque<Integer> idxStack = getStack(minIdx, maxIdx);
-            CompletableFuture<Void> future = CompletableFuture.runAsync(new MixedThreadSortExecutor<>(innerArray, comparator, minIdx, maxIdx), threadPool);
+            CompletableFuture<Void> future = CompletableFuture.runAsync(new ThreadSortExecutor<>(innerArray, comparator, minIdx, maxIdx), threadPool);
 
             futures.put(future, idxStack);
         }

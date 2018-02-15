@@ -1,19 +1,30 @@
 package by.dm13y.study;
 
 import java.util.Comparator;
+import java.util.concurrent.CompletableFuture;
 
-public class MixedThreadSortExecutor<E> implements Runnable {
+class ThreadSortExecutor<E> implements Runnable {
     private final E[] array;
     private final Comparator<E> comparator;
     private final int minIdx;
     private final int maxIdx;
     private final int ARRAY_SIZE_FOR_BUBBLE_SORT = 16;
+    private final ExecutionService pool;
 
-    public MixedThreadSortExecutor(E[] array, Comparator<E> comparator, int minIdx, int maxIdx){
+    public ThreadSortExecutor(E[] array, Comparator<E> comparator, int minIdx, int maxIdx){
         this.array = array;
         this.comparator = comparator;
         this.minIdx = minIdx;
         this.maxIdx = maxIdx;
+        pool = null;
+    }
+
+    public ThreadSortExecutor(E[] array, Comparator<E> comparator, int minIdx, int maxIdx, ExecutionService execService){
+        this.array = array;
+        this.comparator = comparator;
+        this.minIdx = minIdx;
+        this.maxIdx = maxIdx;
+        pool = execService;
     }
 
     private void swap(int i, int j){
@@ -59,9 +70,22 @@ public class MixedThreadSortExecutor<E> implements Runnable {
             }
         }
         doQuickSort(start, mdl);
-        doQuickSort(mdl + 1, end);
-    }
+        if(pool != null){
+            CompletableFuture<Void> result = pool.execute(new ThreadSortExecutor(array, comparator, mdl + 1, end, pool));
+            if(result != null){
+                try {
+                    result.get();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else {
+                doQuickSort(mdl + 1, end);
+            }
+        }else {
+            doQuickSort(mdl + 1, end);
+        }
 
+    }
 
     @Override
     public void run() {
