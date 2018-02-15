@@ -13,7 +13,8 @@
     <groupId>by.dm13y.study</groupId>
     <artifactId>otus_HW_14</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <description>multitrading sort</description>
+    <name>otus_HW_14</name>
+    <description>multithreading sort</description>
 
     <dependencies>
         <dependency>

@@ -4,6 +4,6 @@ import java.util.Comparator;
 import java.util.List;
 
 @FunctionalInterface
-public interface Sorter<T> {
-    List<T> sort(List<T> list, Comparator<T> comparator);
+public interface Sorter<E> {
+    List<E> sort(List<E> list, Comparator<E> comparator);
 }
