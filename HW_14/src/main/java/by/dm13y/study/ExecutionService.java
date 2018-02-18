@@ -9,7 +9,6 @@ import java.util.concurrent.locks.ReentrantLock;
 class ExecutionService {
     private final ThreadPoolExecutor pool;
     private final int nThreads;
-    private final Lock lock = new ReentrantLock();
 
     public ExecutionService(int nThreads){
         pool = (ThreadPoolExecutor)Executors.newFixedThreadPool(nThreads);
@@ -18,15 +17,17 @@ class ExecutionService {
 
     public CompletableFuture<Void> execute(ThreadSortExecutor sortExecutor){
         CompletableFuture<Void> result = null;
-        lock.lock();
         try {
             if (!isBusy()) {
-                result = CompletableFuture.runAsync(sortExecutor, pool);
+                synchronized (this){
+                    if(!isBusy()){
+                        result = CompletableFuture.runAsync(sortExecutor, pool);
+                    }
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        lock.unlock();
         return result;
     }
 
