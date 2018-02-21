@@ -1,7 +1,13 @@
 package by.dm13y.study.services.message;
 
 public class Address {
-    public Address(){
-        throw new UnsupportedOperationException();
+    private final Type type;
+    public Address(Type type){
+        this.type = type;
+    }
+
+    public enum Type{
+        DB_SERVICE,
+        WEB_SOCKET;
     }
 }

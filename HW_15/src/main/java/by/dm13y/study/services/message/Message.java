@@ -1,5 +1,8 @@
 package by.dm13y.study.services.message;
 
+import lombok.Getter;
+
+@Getter
 public abstract class Message {
     private final Address from;
     private final Address to;

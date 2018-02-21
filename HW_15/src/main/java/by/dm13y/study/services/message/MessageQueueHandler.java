@@ -3,11 +3,11 @@ package by.dm13y.study.services.message;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.RecursiveAction;
 
-public class MessageQueueExecutor extends RecursiveAction{
+public class MessageQueueHandler extends RecursiveAction{
     private final ConcurrentLinkedQueue<Message> messages;
     private final MsgRecipient recipient;
 
-    public MessageQueueExecutor(MsgRecipient recipient, ConcurrentLinkedQueue<Message> messages){
+    public MessageQueueHandler(MsgRecipient recipient, ConcurrentLinkedQueue<Message> messages){
         this.messages = messages;
         this.recipient = recipient;
     }

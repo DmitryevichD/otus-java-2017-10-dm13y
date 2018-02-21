@@ -20,7 +20,7 @@ public class MessageCore {
     private final ForkJoinPool pool = new ForkJoinPool(POOL_SIZE);
     private final Map<Address, ConcurrentLinkedQueue<Message>> messageMap = new ConcurrentHashMap<>();
     private final Map<Address, MsgRecipient> addressMap = new ConcurrentHashMap<>();
-    private final HashMap<Address, MessageQueueExecutor> taskList = new HashMap<>();
+    private final HashMap<Address, MessageQueueHandler> taskList = new HashMap<>();
 
     public void addRecipient(MsgRecipient msgRecipient){
         addressMap.put(msgRecipient.getAddress(), msgRecipient);
@@ -29,12 +29,15 @@ public class MessageCore {
 
 
     private void newTask(MsgRecipient recipient, ConcurrentLinkedQueue<Message> queue) {
-        MessageQueueExecutor mqe = new MessageQueueExecutor(recipient, queue);
+        MessageQueueHandler mqe = new MessageQueueHandler(recipient, queue);
         pool.invoke(mqe);
         taskList.put(recipient.getAddress(), mqe);
     }
 
-    @PostConstruct
+    public void sendMessage(Message message){
+        messageMap.get(message.getTo()).add(message);
+    }
+
     public void start(){
         logger.info("Message core is started");
         while (true){
