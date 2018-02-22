@@ -8,6 +8,6 @@ public class Address {
 
     public enum Type{
         DB_SERVICE,
-        WEB_SOCKET;
+        WEB_SOCKET
     }
 }

@@ -13,7 +13,7 @@ public abstract class MsgToDB extends Message {
     public void exec(MsgRecipient msgRecipient) {
         if (msgRecipient instanceof CacheInfo){
             exec((CacheInfo)msgRecipient);
-        };
+        }
 
     }
 

@@ -13,6 +13,7 @@
     <groupId>by.dm13y.study</groupId>
     <artifactId>HW_15</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
     <name>otus_HW_15</name>
     <description>message system</description>
 
@@ -60,5 +61,27 @@
             <artifactId>gson</artifactId>
             <version>2.8.2</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
     </dependencies>
+
+    <build>
+        <finalName>HW_15</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+                    <webResources>
+                        <resources>
+                            <directory>src/main/webapp</directory>
+                        </resources>
+                    </webResources>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
