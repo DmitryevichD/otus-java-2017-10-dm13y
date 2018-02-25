@@ -5,7 +5,6 @@ import by.dm13y.study.services.message.Message;
 import by.dm13y.study.services.message.MessageService;
 import by.dm13y.study.services.message.MsgRecipient;
 import by.dm13y.study.services.web.wsockets.MsgToCacheInfoWS;
-import by.dm13y.study.services.web.wsockets.WebSocketMsgr;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,14 +39,9 @@ public class CacheInfoImpl implements CacheInfo, MsgRecipient{
 
     @Override
     public void getInfoByJson(Address address) {
-        Message message = new MsgToCacheInfoWS(getAddress(), address) {
-            @Override
-            public void exec(WebSocketMsgr webSocketMsgr) {
-                webSocketMsgr.sendMsgToClient(jsonCacheInfo());
-            }
-        };
+        String cacheInfo = jsonCacheInfo();
+        Message message = new MsgToCacheInfoWS(getAddress(), address, cacheInfo);
         msgService.sendMessage(message);
-
     }
 
     private String attrVal(String name) {

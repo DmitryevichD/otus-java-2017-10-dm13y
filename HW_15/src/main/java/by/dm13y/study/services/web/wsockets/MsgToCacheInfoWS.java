@@ -4,9 +4,11 @@ import by.dm13y.study.services.message.Address;
 import by.dm13y.study.services.message.Message;
 import by.dm13y.study.services.message.MsgRecipient;
 
-public abstract class MsgToCacheInfoWS extends Message {
-    public MsgToCacheInfoWS(Address from, Address to) {
+public class MsgToCacheInfoWS extends Message {
+    private final String cacheInfo;
+    public MsgToCacheInfoWS(Address from, Address to, String cacheInfo) {
         super(from, to);
+        this.cacheInfo = cacheInfo;
     }
 
     @Override
@@ -16,5 +18,7 @@ public abstract class MsgToCacheInfoWS extends Message {
         }
     }
 
-    public abstract void exec(WebSocketMsgr webSocketMsgr);
+    public void exec(WebSocketMsgr webSocketMsgr){
+        webSocketMsgr.sendMsgToClient(cacheInfo);
+    }
 }

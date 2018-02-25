@@ -2,7 +2,6 @@ package by.dm13y.study.services.web.wsockets;
 
 import by.dm13y.study.auth.UserChecker;
 import by.dm13y.study.config.ContextAware;
-import by.dm13y.study.services.database.CacheInfo;
 import by.dm13y.study.services.database.CacheInfoImpl;
 import by.dm13y.study.services.database.MsgToDB;
 import by.dm13y.study.services.message.Address;
@@ -52,12 +51,7 @@ public class CacheInfoWs implements MsgRecipient, WebSocketMsgr {
 
     @OnMessage
     public void getCacheInfo(String msg, Session session){
-        Message message = new MsgToDB(address, dbRecipient.getAddress()){
-            @Override
-            public void exec(CacheInfo cacheInfo) {
-                cacheInfo.getInfoByJson(getAddress());
-            }
-        };
+        Message message = new MsgToDB(address, dbRecipient.getAddress(), MsgToDB.DbMsgType.CACHE_INFO);
         msgService.sendMessage(message);
     }
 
