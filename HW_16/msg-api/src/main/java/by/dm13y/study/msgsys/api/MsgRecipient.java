@@ -1,59 +1,72 @@
 package by.dm13y.study.msgsys.api;
 
 import by.dm13y.study.msgsys.api.messages.Message;
-import by.dm13y.study.msgsys.api.messages.RegMsg;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public abstract class MsgRecipient {
-    private final InetAddress msgSysAddr;
-    private final int msgSysPort;
-    private final Socket socket;
-    private final Header header;
+    private final int msgSysPort = 9999;
+    private final String msgSysHost;
+    private Header header;
+    private Socket socket;
 
-
-    public MsgRecipient(InetAddress msgSysAddr, int msgSysPort, RecipientType type){
-        this.msgSysAddr = msgSysAddr;
-        this.msgSysPort = msgSysPort;
-        socket = initSocket();
-        header = regToMsgSys(type);
+    public MsgRecipient(String msgSysHost, RecipientType recipientType){
+        this.msgSysHost = msgSysHost;
+        this.header = new Header(recipientType);
     }
 
-    private Socket initSocket(){
-        receiveMsg();
+    public void connect(){
+        buildSocket();
     }
 
-    private Header regToMsgSys(RecipientType type){
-        if(socket.isConnected()){
-            try (ObjectOutputStream objwriter = new ObjectOutputStream(socket.getOutputStream());
-                 ObjectInputStream objReader = new ObjectInputStream(socket.getInputStream())) {
-                objwriter.writeObject(new RegMsg(new Header(type)));
-                Object obj = objReader.readObject();
-                if(obj instanceof RegMsg)
-                return (Header)
-            } catch (Exception ex) {
-                //todo: add logging
+    private void buildSocket() {
+        try (ObjectOutputStream objWriter = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream objReader = new ObjectInputStream(socket.getInputStream())) {
+            socket.connect(new InetSocketAddress(msgSysHost, msgSysPort), 1000);
+            objWriter.writeObject(header);
+            Object obj = objReader.readObject();
+            if (obj instanceof Header) {
+                header = ((Header) obj);
+            }else {
+                throw new UnsupportedOperationException("answer must be is Header.class");
             }
-        }else {
-            //todo: add Runtime exception
+        }catch (Exception ex) {
+            throw new UnsupportedOperationException(ex);
         }
     }
 
-    public void transmitMsg(Message msg){
+    public void sendMsg(Message msg){
         if(socket.isConnected()){
             try (ObjectOutputStream objwriter = new ObjectOutputStream(socket.getOutputStream())) {
-                objwriter.writeObject(header);
+                objwriter.writeObject(msg);
             } catch (IOException ex) {
-
+                throw new UnsupportedOperationException(ex.getMessage());
             }
         }
     }
 
-    public void receiveMsg(Message msg){
-
+    public void getMsg(){
+        try (ObjectInputStream objReader = new ObjectInputStream(socket.getInputStream())) {
+            Message message = (Message)objReader.readObject();
+            handleReceiveMsg(message);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
+
+    public void disconnect(){
+        if(!socket.isClosed()){
+            try {
+                socket.close();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
+
+    public abstract void handleReceiveMsg(Message msg);
 }
