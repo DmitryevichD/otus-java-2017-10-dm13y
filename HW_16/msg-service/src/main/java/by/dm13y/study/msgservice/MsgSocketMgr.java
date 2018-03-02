@@ -13,14 +13,14 @@ import java.net.SocketTimeoutException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class RegSocketMgr extends Thread {
+public class MsgSocketMgr extends Thread {
     private final int SERVICE_REG_PORT;
     private final int CHECK_INTERRUPT_TIMEOUT;
     private final MsgQueue msgQueue;
-    private final static Logger logger = LoggerFactory.getLogger(RegSocketMgr.class);
+    private final static Logger logger = LoggerFactory.getLogger(MsgSocketMgr.class);
     private final AtomicInteger idGenerator = new AtomicInteger(0);
 
-    public RegSocketMgr(int SERVICE_REG_PORT, int CHECK_INTERRUPT_TIMEOUT, MsgQueue msgQueue) {
+    public MsgSocketMgr(int SERVICE_REG_PORT, int CHECK_INTERRUPT_TIMEOUT, MsgQueue msgQueue) {
         this.SERVICE_REG_PORT = SERVICE_REG_PORT;
         this.CHECK_INTERRUPT_TIMEOUT = CHECK_INTERRUPT_TIMEOUT;
         this.msgQueue = msgQueue;
@@ -34,16 +34,29 @@ public class RegSocketMgr extends Thread {
                 serverSocket.setSoTimeout(CHECK_INTERRUPT_TIMEOUT);
                 Socket socket = serverSocket.accept();
                 CompletableFuture.runAsync(() -> {
-                    ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
-                    ObjectOutputStream os = new ObjectOutputStream(socket.getOutputStream(););
-                    Header header = (Header) is.readObject();
+                    ObjectInputStream is = null;
+                    ObjectOutputStream os = null;
+                    Header header = null;
+
+                    try {
+                        is = new ObjectInputStream(socket.getInputStream());
+                        os = new ObjectOutputStream(socket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        header = (Header) is.readObject();
+                    } catch (Exception e) {
+                        logger.error("incorrect header", e);
+                    }
                     header.setId(idGenerator.incrementAndGet());
                     try {
                         os.writeObject(header);
                     } catch (IOException e) {
                         logger.error(e.getMessage(), e);
                     }
-                    msgQueue.addRecipinet(header);
+                    msgQueue.addRecipient(header, new MsgSocketWrapper(socket));
                 });
             } catch (SocketTimeoutException ex) {
                 logger.info("check interrupt");
