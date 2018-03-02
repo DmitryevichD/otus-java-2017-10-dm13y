@@ -1,6 +1,7 @@
 package by.dm13y.study.msgsys.api;
 
 import by.dm13y.study.msgsys.api.messages.Message;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -9,7 +10,8 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public abstract class MsgRecipient {
-    private final int msgSysPort = 9999;
+    @Getter
+    private static final int msgSysPort = 9999;
     private final String msgSysHost;
     private Header header;
     private Socket socket;

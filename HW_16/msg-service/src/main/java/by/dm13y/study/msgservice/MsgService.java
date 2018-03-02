@@ -1,5 +1,6 @@
 package by.dm13y.study.msgservice;
 
-public class MsgService {
+public interface MsgService {
+    void start();
 
 }

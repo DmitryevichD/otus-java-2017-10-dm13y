@@ -27,8 +27,10 @@ public class MsgRecipientTest {
         Assert.assertNull(header.getId());
         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
         out.writeObject(header);
+        System.out.println(header.getId());
         ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
         header = (Header)input.readObject();
+        System.out.println(header.getId());
         Assert.assertNotNull(header.getId());
         Thread.sleep(1000);
         out.writeObject("sdfasfd");
@@ -49,20 +51,25 @@ public class MsgRecipientTest {
                 }
                 try {
                     Socket client = socket.accept();
+                    Thread.sleep(10000);
+                    System.out.println("IIIIIII");
                     ObjectInputStream inputStream = new ObjectInputStream(client.getInputStream());
+                    inputStream.close();
                     Object obj = inputStream.readObject();
                     if (obj instanceof Header) {
                         Header header = ((Header) obj);
                         header.setId(new Random().nextInt());
                         ObjectOutputStream outputStream = new ObjectOutputStream(client.getOutputStream());
                         outputStream.writeObject(header);
-                    }else {
-                        throw new  UnsupportedOperationException("Object is not header");
+                    } else {
+                        throw new UnsupportedOperationException("Object is not header");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
                 int i = 10;
             }
