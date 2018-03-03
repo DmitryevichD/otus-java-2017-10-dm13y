@@ -1,16 +1,14 @@
 package by.dm13y.study.msgservice;
 
 import by.dm13y.study.msgsys.api.Header;
+import by.dm13y.study.msgsys.api.MsgSocketWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MsgSocketMgr extends Thread {
@@ -24,40 +22,33 @@ public class MsgSocketMgr extends Thread {
         this.SERVICE_REG_PORT = SERVICE_REG_PORT;
         this.CHECK_INTERRUPT_TIMEOUT = CHECK_INTERRUPT_TIMEOUT;
         this.msgQueue = msgQueue;
+        setName("Socket manager");
     }
 
     @Override
     public void run() {
+        ServerSocket serverSocket = null;
+        try {
+            serverSocket = new ServerSocket(SERVICE_REG_PORT);
+            serverSocket.setSoTimeout(CHECK_INTERRUPT_TIMEOUT);
+        } catch (IOException e) {
+            logger.error("service socket error", e);
+            return;
+        }
         while (!isInterrupted()) {
             try {
-                ServerSocket serverSocket = new ServerSocket(SERVICE_REG_PORT);
-                serverSocket.setSoTimeout(CHECK_INTERRUPT_TIMEOUT);
                 Socket socket = serverSocket.accept();
-                CompletableFuture.runAsync(() -> {
-                    ObjectInputStream is = null;
-                    ObjectOutputStream os = null;
-                    Header header = null;
+                MsgSocketWrapper msgSocket = new MsgSocketWrapper(socket);
+                Object header = msgSocket.readObjectFromSocket();
+                if(header instanceof Header){
+                    Header serHeader = ((Header) header);
+                    msgQueue.addRecipient(serHeader, msgSocket);
+                    logger.debug("Added header:" + serHeader + " to queue");
 
-                    try {
-                        is = new ObjectInputStream(socket.getInputStream());
-                        os = new ObjectOutputStream(socket.getOutputStream());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                }else {
 
-                    try {
-                        header = (Header) is.readObject();
-                    } catch (Exception e) {
-                        logger.error("incorrect header", e);
-                    }
-                    header.setId(idGenerator.incrementAndGet());
-                    try {
-                        os.writeObject(header);
-                    } catch (IOException e) {
-                        logger.error(e.getMessage(), e);
-                    }
-                    msgQueue.addRecipient(header, new MsgSocketWrapper(socket));
-                });
+                }
+
             } catch (SocketTimeoutException ex) {
                 logger.info("check interrupt");
             } catch (Exception ex) {
