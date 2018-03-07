@@ -11,11 +11,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ForkJoinPool;
 
 public class MsgSocketProcessor extends Thread {
     private final MsgQueue msgQueue;
     private final long PROCESSING_DELAY;
     private final static Logger logger = LoggerFactory.getLogger(MsgSocketProcessor.class);
+    private volatile boolean isStarted = false;
 
     public MsgSocketProcessor(MsgQueue msgQueue, long processing_delay) {
         this.msgQueue = msgQueue;
@@ -23,8 +25,13 @@ public class MsgSocketProcessor extends Thread {
         setName("Msg socket processor");
     }
 
+    public boolean isStarted(){
+        return isStarted;
+    }
+
     @Override
     public void run(){
+        isStarted = true;
         while(!isInterrupted()){
             Map<Header, MsgSocketWrapper> socketMap = msgQueue.getSocketMap();
             for (Map.Entry<Header, MsgSocketWrapper> entry : socketMap.entrySet()) {
@@ -50,7 +57,8 @@ public class MsgSocketProcessor extends Thread {
             try {
                 sleep(PROCESSING_DELAY);
             } catch (InterruptedException e) {
-                logger.info("Thread is interrupted", e);
+                interrupt();
+                logger.info("Thread is interrupted");
             }
         }
     }

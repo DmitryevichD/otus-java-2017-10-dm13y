@@ -32,8 +32,20 @@ public class MsgSocketWrapper {
         return msgList;
     }
 
+    public void writeObjectToSocket(Serializable object){
+        try {
+            socket.getOutputStream().write(objToByteArray(object));
+        } catch (IOException e) {
+            logger.error("write object to socket error", e);
+        }
+    }
+
     public Object readObjectFromSocket() throws IOException{
-        byte[] header = readStreamFromSocket(4);
+        return readObjectFromSocket(false);
+    }
+
+    public Object readObjectFromSocket(boolean waitData) throws IOException{
+        byte[] header = readStreamFromSocket(4, waitData);
 
         if(header == null){ return null;}
 
@@ -44,9 +56,13 @@ public class MsgSocketWrapper {
         return SerializationUtils.deserialize(object);
     }
 
-    private byte[] readStreamFromSocket(int countByte) throws IOException{
-        if(socket.getInputStream().available() == 0){
-            logger.debug("socket input stream is empty");
+    private byte[] readStreamFromSocket(int countByte) throws IOException {
+        return readStreamFromSocket(countByte, false);
+    }
+
+    private byte[] readStreamFromSocket(int countByte, boolean waitData) throws IOException{
+        if(!waitData && socket.getInputStream().available() == 0){
+            logger.trace("socket input stream is empty");
             return null;
         }
 
@@ -71,14 +87,13 @@ public class MsgSocketWrapper {
 
     public void writeMessage(Message message) {
         try {
-            socket.getOutputStream().write(msgToByteArray(message));
+            socket.getOutputStream().write(objToByteArray(message));
         } catch (IOException e) {
             logger.error("write to socket error", e);
         }
     }
 
-
-    private byte[] msgToByteArray(Serializable object){
+    private byte[] objToByteArray(Serializable object){
         byte[] serObject = SerializationUtils.serialize(object);
         ByteBuffer byteBuffer = ByteBuffer.allocate(4 + serObject.length);
         byteBuffer.putInt(serObject.length);

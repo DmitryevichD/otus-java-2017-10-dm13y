@@ -17,12 +17,17 @@ public class MsgSocketMgr extends Thread {
     private final MsgQueue msgQueue;
     private final static Logger logger = LoggerFactory.getLogger(MsgSocketMgr.class);
     private final AtomicInteger idGenerator = new AtomicInteger(0);
+    private volatile boolean isStarted = false;
 
     public MsgSocketMgr(int SERVICE_REG_PORT, int CHECK_INTERRUPT_TIMEOUT, MsgQueue msgQueue) {
         this.SERVICE_REG_PORT = SERVICE_REG_PORT;
         this.CHECK_INTERRUPT_TIMEOUT = CHECK_INTERRUPT_TIMEOUT;
         this.msgQueue = msgQueue;
         setName("Socket manager");
+    }
+
+    public boolean isStarted(){
+        return isStarted;
     }
 
     @Override
@@ -37,23 +42,31 @@ public class MsgSocketMgr extends Thread {
         }
         while (!isInterrupted()) {
             try {
+                isStarted = true;
                 Socket socket = serverSocket.accept();
                 MsgSocketWrapper msgSocket = new MsgSocketWrapper(socket);
-                Object header = msgSocket.readObjectFromSocket();
+                Object header = msgSocket.readObjectFromSocket(true);
                 if(header instanceof Header){
-                    Header serHeader = ((Header) header);
-                    msgQueue.addRecipient(serHeader, msgSocket);
-                    logger.debug("Added header:" + serHeader + " to queue");
-
+                    Header reqHeader = ((Header) header);
+                    buildHeader(reqHeader);
+                    msgQueue.addRecipient(reqHeader, msgSocket);
+                    msgSocket.writeObjectToSocket(reqHeader);
+                    logger.debug("Added header:" + reqHeader + " to queue");
                 }else {
-
+                    throw new  UnsupportedOperationException("????");
                 }
 
             } catch (SocketTimeoutException ex) {
-                logger.info("check interrupt");
+                logger.trace("check interrupt");
             } catch (Exception ex) {
                 logger.error(ex.getMessage(), ex);
             }
         }
+        logger.info("thread is interrupted");
+    }
+
+    private void buildHeader(Header header) {
+        header.setId(idGenerator.incrementAndGet());
+        logger.info("add id to header:" + header.getId());
     }
 }

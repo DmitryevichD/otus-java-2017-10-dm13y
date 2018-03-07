@@ -3,6 +3,7 @@ package by.dm13y.study.msgservice;
 
 import by.dm13y.study.msgsys.api.Header;
 import by.dm13y.study.msgsys.api.messages.Message;
+import by.dm13y.study.msgsys.api.messages.MsgException;
 import by.dm13y.study.msgsys.api.messages.MsgState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,15 @@ public class MsgQueueProcessor extends Thread{
                             if (msg instanceof MsgState) {
                                 msg.setState(msgQueue.getSocketMap().keySet());
                                 msgQueue.getOutputQueue().get(entry.getKey()).add(msg);
+                            }else {
+                                Long recipientId = msg.getToId();
+                                ConcurrentLinkedQueue<Message> outQuery = msgQueue.getOutputQueue().get(recipientId);
+                                if(outQuery == null){
+                                    Message exception = new MsgException(msg, new UnsupportedOperationException("recipient not found"));
+                                    msgQueue.getOutputQueue().get(msg.getFrom()).add(exception);
+                                }else{
+                                    outQuery.add(msg);
+                                }
                             }
                         }
                     });
@@ -45,7 +55,8 @@ public class MsgQueueProcessor extends Thread{
             try {
                 sleep(PROCESSING_DELAY);
             } catch (InterruptedException e) {
-                logger.info("Thread is interrupted", e);
+                interrupt();
+                logger.info("Thread is interrupted");
             }
         }
     }
