@@ -4,26 +4,21 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>by.dm13y.study</groupId>
-        <artifactId>otus-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
-
     <groupId>by.dm13y.study</groupId>
     <artifactId>HW_16</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>otus_HW_16</name>
-
     <packaging>pom</packaging>
+
+    <modules>
+        <module>msg-api</module>
+        <module>msg-system</module>
+        <module>msg-web-service</module>
+        <module>msg-db-service</module>
+    </modules>
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>by.dm13y.study</groupId>
-                <artifactId>msg-api</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
@@ -35,8 +30,16 @@
                 <version>2.10.0</version>
             </dependency>
             <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.16.18</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
+                <version>4.12</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -46,10 +49,18 @@
         </dependencies>
     </dependencyManagement>
 
-    <modules>
-        <module>msg-api</module>
-        <module>msg-service</module>
-        <module>msg-web-client</module>
-        <module>msg-db-client</module>
-    </modules>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.7.0</version>
+                    <configuration>
+                        <target>1.8</target>
+                        <source>1.8</source>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

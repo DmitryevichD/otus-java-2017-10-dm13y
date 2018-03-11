@@ -43,7 +43,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>by.dm13y.study.StartApp</mainClass>
+                            <mainClass>StartApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

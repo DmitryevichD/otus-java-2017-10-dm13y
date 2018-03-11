@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript">
+        var ws = new WebSocket('ws://localhost:8090//ws/cacheinfo');
+
+        function sendData() {
+            ws.send("");
+        }
+
+        ws.onmessage = function (event) {
+            var cacheinfo = JSON.parse(event.data);
+            document.getElementById("miss").innerHTML = "Miss: " + cacheinfo.miss;
+            document.getElementById("hit").innerHTML = "Hit: " + cacheinfo.hit;
+            document.getElementById("capacity").innerHTML = "Capacity: " + cacheinfo.capacity;
+            document.getElementById("cachesize").innerHTML = "CacheSize: " + cacheinfo.cacheSize;
+            document.getElementById("eviction").innerHTML = "Eviction: " + cacheinfo.eviction;
+            document.getElementById("idletime").innerHTML = "Idle time (ms): " + cacheinfo.timeToIdle;
+            document.getElementById("lifetime").innerHTML = "Life time (ms): " + cacheinfo.timeToLive;
+        };
+    </script>
+</head>
+<body onload="sendData()">
+    <h2>HW_16 Message Server</h2>
+    <h4 id="miss">Miss: 0</h4>
+    <h4 id="hit">Hit: 0</h4>
+    <h4 id="capacity">Capacity: 0</h4>
+    <h4 id="cachesize">Cache size: 0</h4>
+    <h4 id="eviction">Eviction: 0</h4>
+    <h4 id="idletime">Idle time (ms): 0</h4>
+    <h4 id="lifetime">Life time (ms): 0</h4>
+    <button onclick="sendData()">Обновить данные</button>
+</body>
+</html>

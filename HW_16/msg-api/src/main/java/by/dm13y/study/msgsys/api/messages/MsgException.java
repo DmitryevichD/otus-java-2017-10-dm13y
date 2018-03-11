@@ -1,11 +1,14 @@
 package by.dm13y.study.msgsys.api.messages;
 
 
-public class MsgException extends Message {
-    private Throwable throwable;
+import by.dm13y.study.msgsys.api.Sender;
 
-    public MsgException(Message sourceMsg, Throwable throwable){
-        super(sourceMsg.getFrom(), sourceMsg.getToId());
-        this.throwable = throwable;
+public class MsgException extends Message {
+    public MsgException(Sender sender, Message sourceMessage, Throwable throwable){
+        super(sender, sourceMessage.getSender().getId(), throwable, sourceMessage.getMsgMarker());
+    }
+
+    public Throwable getThrowable(){
+        return (Throwable)getBody();
     }
 }
