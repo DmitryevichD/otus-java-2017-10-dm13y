@@ -4,25 +4,18 @@ import by.dm13y.study.msgsys.api.*;
 import by.dm13y.study.msgsys.api.messages.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 
 import static java.lang.Thread.sleep;
 
-public class DBMsgRecipient extends MsgRecipient implements Runnable{
+class DBMsgRecipient extends MsgRecipient implements Runnable{
     private final static Logger logger = LoggerFactory.getLogger(DBMsgRecipient.class);
-    private DBCacheInformer cacheInformer;
+    private final DBCacheInformer cacheInformer = new DBCacheInformerImpl();
 
     public DBMsgRecipient(String msgSysHost, SenderType recipientType) {
         super(msgSysHost, recipientType);
     }
-
-    @Autowired
-    public void setDBCacheInformer(DBCacheInformer cacheInformer) {
-        this.cacheInformer = cacheInformer;
-    }
-
 
     @Override
     public void handleSysMsg(MsgSys msgState, MsgSys.Operation operId) {
@@ -37,14 +30,14 @@ public class DBMsgRecipient extends MsgRecipient implements Runnable{
 
     @Override
     public void handleReceiveMsg(Message msg) {
-        Message response = null;
+        Message response;
         if (msg instanceof MsgToDB) {
             MsgToDB msgToDB = ((MsgToDB) msg);
             try {
                 String body = (String) msgToDB.getBody();
                 if (body.equals("cacheInfo")) {
                     String cacheInfo = cacheInformer.getCacheInfo();
-                    response = MessageHelper.buildResponce(sender, msg, cacheInfo);
+                    response = MessageHelper.buildResponse(sender, msg, cacheInfo);
                 } else {
                     logger.error(body + " command is not supported");
                     response = new MsgException(sender, msg, new UnsupportedOperationException("db -> command is not supported"));

@@ -1,17 +1,11 @@
 package by.dm13y.study.msgsys.dbservice;
 
 import com.google.gson.Gson;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Random;
 
 public class DBCacheInformerImpl implements DBCacheInformer {
-    private Gson gson;
-
-    @Autowired
-    public void setGson(){
-        this.gson = gson;
-    }
+    private final Gson gson = new Gson();
 
     @Override
     public String getCacheInfo() {

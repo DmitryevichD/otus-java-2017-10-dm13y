@@ -1,5 +1,5 @@
 package by.dm13y.study.msgsys.dbservice;
 
-public interface DBCacheInformer {
+interface DBCacheInformer {
     String getCacheInfo();
 }
