@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class CacheInfoCtrl {
+    @SuppressWarnings("SameReturnValue")
     @GetMapping("/")
     public String infoPage(){
         return "index";

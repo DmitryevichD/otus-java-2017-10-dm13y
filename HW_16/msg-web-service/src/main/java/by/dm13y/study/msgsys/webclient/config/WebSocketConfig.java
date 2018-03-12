@@ -15,9 +15,12 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 @EnableWebSocket
 @ComponentScan("by.dm13y.study.msgsys.webclient.websockets")
 public class WebSocketConfig implements WebSocketConfigurer{
+    private CacheInfoWS cacheInfoWS;
 
     @Autowired
-    private CacheInfoWS cacheInfoWS;
+    public void setCacheInfoWS(CacheInfoWS cacheInfoWS) {
+        this.cacheInfoWS = cacheInfoWS;
+    }
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {

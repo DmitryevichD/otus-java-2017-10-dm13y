@@ -1,6 +1,5 @@
 package by.dm13y.study.msgsys.webclient.msg;
 
-import by.dm13y.study.msgsys.api.Sender;
 import by.dm13y.study.msgsys.api.MsgRecipient;
 import by.dm13y.study.msgsys.api.SenderType;
 import by.dm13y.study.msgsys.api.messages.*;
@@ -10,7 +9,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,8 +18,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class MsgClient extends MsgRecipient implements Runnable{
     private final Logger logger = LoggerFactory.getLogger(MsgClient.class);
-    private List<Sender> dbServiceList = Collections.EMPTY_LIST;
-    private AtomicLong msgIdGenerator = new AtomicLong();
+    private List<Integer> dbServiceList = new ArrayList<>();
+    private final AtomicLong msgIdGenerator = new AtomicLong();
     private final Map<Long, WebSocketSession> localSenders = new ConcurrentHashMap<>();
     public MsgClient() {
         super("", SenderType.WEB_SOCKET);
@@ -28,8 +27,9 @@ public class MsgClient extends MsgRecipient implements Runnable{
 
     @Override
     public void handleSysMsg(MsgSys msgSys, MsgSys.Operation operId) {
-        if(operId == MsgSys.Operation.RECIPIENT_LIST){
-            dbServiceList = (List<Sender>)msgSys.getBody();
+        if(operId == MsgSys.Operation.DB_RECIPIENT_LIST){
+            //noinspection unchecked
+            dbServiceList = (List<Integer>)msgSys.getBody();
         }
     }
 
@@ -58,19 +58,21 @@ public class MsgClient extends MsgRecipient implements Runnable{
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void removeHandler(Long id) {
         localSenders.remove(id);
     }
 
+    @SuppressWarnings("unchecked")
     public void getCacheInfoFromDB(WebSocketSession session) {
         if (dbServiceList.isEmpty()) {
-            getRecipientsList();
+            getDBRecipientsList();
         }
         if (dbServiceList.isEmpty()) {
             logger.info("database services is not connected to msg-system");
             return;
         }
-        MsgToDB msgToDB = new MsgToDB(sender, dbServiceList.get(0).getId(), "cacheInfo", msgIdGenerator.incrementAndGet());
+        MsgToDB msgToDB = new MsgToDB(sender, dbServiceList.get(0), "cacheInfo", msgIdGenerator.incrementAndGet());
         getCacheInfo(msgToDB, session);
     }
 

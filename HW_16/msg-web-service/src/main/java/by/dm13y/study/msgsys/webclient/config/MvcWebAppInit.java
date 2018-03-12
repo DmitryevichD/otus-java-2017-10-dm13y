@@ -16,7 +16,7 @@ public class MvcWebAppInit extends AbstractAnnotationConfigDispatcherServletInit
     protected Class<?>[] getServletConfigClasses() {
         return new Class[]{MvcWebConfig.class, WebSocketConfig.class};
     }
-
+    @Nullable
     @Override
     protected String[] getServletMappings() {
         return new String[]{"/"};

@@ -1,15 +1,11 @@
 <!DOCTYPE html>
+<!--suppress ALL -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <script type="text/javascript">
-        var ws = new WebSocket('ws://localhost:8090//ws/cacheinfo');
-
-        function sendData() {
-            ws.send("");
-        }
-
+        var ws = new WebSocket('ws://localhost:8088//ws/cacheinfo');
         ws.onmessage = function (event) {
             var cacheinfo = JSON.parse(event.data);
             document.getElementById("miss").innerHTML = "Miss: " + cacheinfo.miss;
@@ -20,9 +16,13 @@
             document.getElementById("idletime").innerHTML = "Idle time (ms): " + cacheinfo.timeToIdle;
             document.getElementById("lifetime").innerHTML = "Life time (ms): " + cacheinfo.timeToLive;
         };
+
+        function sendData() {
+            ws.send("");
+        }
     </script>
 </head>
-<body onload="sendData()">
+<body>
     <h2>HW_16 Message Server</h2>
     <h4 id="miss">Miss: 0</h4>
     <h4 id="hit">Hit: 0</h4>
@@ -31,6 +31,6 @@
     <h4 id="eviction">Eviction: 0</h4>
     <h4 id="idletime">Idle time (ms): 0</h4>
     <h4 id="lifetime">Life time (ms): 0</h4>
-    <button onclick="sendData()">Обновить данные</button>
+    <button onclick="sendData()">Запросить данные о кэше</button>
 </body>
 </html>
