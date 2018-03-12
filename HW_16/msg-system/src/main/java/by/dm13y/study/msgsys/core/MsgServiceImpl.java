@@ -4,6 +4,8 @@ import by.dm13y.study.msgsys.api.MsgRecipient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class MsgServiceImpl implements MsgService{
     private final int port = MsgRecipient.getMsgSysPort();
     private final MsgQueue msgQueue = new MsgQueue();
@@ -11,17 +13,20 @@ public class MsgServiceImpl implements MsgService{
     private Thread socketProcessor;
     private Thread queueProcessor;
     private final static Logger logger = LoggerFactory.getLogger(MsgServiceImpl.class);
+    private final static AtomicInteger ID_GEN = new AtomicInteger(0);
+
+    private static Integer newSystemId(){
+        return ID_GEN.decrementAndGet();
+    }
+
     @Override
     public void start() {
         socketMgr = new MsgSocketMgr(port, 1000, msgQueue);
         socketMgr.start();
-        logger.info("socket msr started");
         socketProcessor = new MsgSocketProcessor(msgQueue, 20);
         socketProcessor.start();
-        logger.info("socket processor started");
-        queueProcessor = new MsgQueueProcessor(msgQueue, 20);
+        queueProcessor = new MsgQueueProcessor(msgQueue, 20, newSystemId());
         queueProcessor.start();
-        logger.info("queue processor started");
     }
 
     @Override

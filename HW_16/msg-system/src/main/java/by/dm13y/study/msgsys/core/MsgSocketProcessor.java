@@ -12,7 +12,8 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class MsgSocketProcessor extends Thread {
+class MsgSocketProcessor extends Thread {
+    private final String THREAD_NAME = "Msg socket processor";
     private final MsgQueue msgQueue;
     private final long PROCESSING_DELAY;
     private final static Logger logger = LoggerFactory.getLogger(MsgSocketProcessor.class);
@@ -21,7 +22,7 @@ public class MsgSocketProcessor extends Thread {
     public MsgSocketProcessor(MsgQueue msgQueue, long processing_delay) {
         this.msgQueue = msgQueue;
         this.PROCESSING_DELAY = processing_delay;
-        setName("Msg socket processor");
+        setName(THREAD_NAME);
     }
 
     public boolean isStarted(){
@@ -30,6 +31,7 @@ public class MsgSocketProcessor extends Thread {
 
     @Override
     public void run(){
+        logger.info(THREAD_NAME + " is started");
         isStarted = true;
         while(!isInterrupted()){
             Map<Sender, MsgSocketWrapper> socketMap = msgQueue.getSocketMap();
@@ -46,15 +48,17 @@ public class MsgSocketProcessor extends Thread {
                     }
 
                     if ((messages != null) && (!messages.isEmpty())) {
+                        logger.debug("handle input messages for " + sender + ", count = " + messages.size());
                         ConcurrentLinkedQueue<Message> input = msgQueue.getInputQueue(sender);
+                        logger.debug(sender + " add message to input queue");
                         if(!input.addAll(messages)){
                             logger.error(messages.toString() + " is not added to input queue for " + sender);
                         }
-                        logger.info("input queue size:" + input.size());
                     }
 
                     ConcurrentLinkedQueue<Message> output = msgQueue.getOutputQueue(sender);
                     while (!output.isEmpty()){
+                        logger.debug("handle output messages for " + sender);
                         Message message = output.poll();
                         socket.writeMessage(message);
                     }
@@ -68,6 +72,7 @@ public class MsgSocketProcessor extends Thread {
                 logger.info("Thread is interrupted");
             }
         }
+        logger.info(THREAD_NAME + " is stopped");
     }
 
 }

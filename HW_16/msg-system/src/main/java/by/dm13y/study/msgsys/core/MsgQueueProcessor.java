@@ -14,21 +14,24 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class MsgQueueProcessor extends Thread{
+class MsgQueueProcessor extends Thread{
+    private final String THREAD_NAME = "Msg queue processor";
     private final int PROCESSING_DELAY;
     private final MsgQueue msgQueue;
     private final static Logger logger = LoggerFactory.getLogger(MsgQueueProcessor.class);
-    private Sender sender = new Sender(SenderType.MSG_CORE_SYS);
+    private final Sender sender;
 
-    public MsgQueueProcessor(MsgQueue msgQueue, int processing_delay){
+    public MsgQueueProcessor(MsgQueue msgQueue, int processing_delay, int senderId){
         this.msgQueue = msgQueue;
         this.PROCESSING_DELAY = processing_delay;
-        setName("Msg queue processor");
-        sender.setId(-1);
+        this.sender = new Sender(SenderType.MSG_CORE_SYS);
+        this.sender.setId(senderId);
+        setName(THREAD_NAME);
     }
 
     @Override
     public void run(){
+        logger.info(THREAD_NAME + " is started");
         while (!isInterrupted()) {
             Map<Sender, ConcurrentLinkedQueue<Message>> queueMap = msgQueue.getInputQueue();
             for (Map.Entry<Sender, ConcurrentLinkedQueue<Message>> entry : queueMap.entrySet()) {
@@ -36,20 +39,25 @@ public class MsgQueueProcessor extends Thread{
                 ConcurrentLinkedQueue<Message> senderInputQueue = entry.getValue();
 
                 if(!senderInputQueue.isEmpty()){
+                    logger.debug("Handle input queue for " + inputQueueSender);
                     CompletableFuture.runAsync(() -> {
                         while (!senderInputQueue.isEmpty()) {
                             Message msg = senderInputQueue.poll();
+                            logger.debug("GET " + msg);
                             if (msg instanceof MsgSys) {
                                 MsgSys msgSys = ((MsgSys) msg);
-                                if(MsgSys.Operation.byMsg(msgSys) == MsgSys.Operation.RECIPIENT_LIST){
-                                    Message senderListMsg = MessageHelper.buildResponce(sender, msg,  msgQueue.getRecipientId());
+                                MsgSys.Operation operation = MsgSys.Operation.byMsg(msgSys);
+                                logger.debug("Handle as system massage with operation: " + operation);
+                                if(operation == MsgSys.Operation.DB_RECIPIENT_LIST){
+                                    Message senderListMsg = MessageHelper.buildResponse(sender, msgSys,  msgQueue.getRecipientDBList(SenderType.DB_SERVICE));
                                     msgQueue.addToOutputQueue(inputQueueSender, senderListMsg);
                                 }else {
-                                    logger.error("System msg operation is not supported");
-                                    Message exception = new MsgException(sender, msg, new UnsupportedOperationException("System msg operation is not supported"));
+                                    logger.error(operation + " is not supported");
+                                    Message exception = new MsgException(sender, msg, new UnsupportedOperationException(operation + " is not supported"));
                                     msgQueue.addToOutputQueue(inputQueueSender, exception);
                                 }
                             }else {
+                                logger.debug("Handle as simple massage");
                                 Integer recipientId = msg.getRecipientId();
                                 try {
                                     msgQueue.addToOutputQueue(recipientId, msg);
@@ -72,5 +80,6 @@ public class MsgQueueProcessor extends Thread{
                 logger.info("Thread is interrupted");
             }
         }
+        logger.info(THREAD_NAME + " is stopped");
     }
 }
