@@ -14,19 +14,19 @@ import java.util.List;
 
 public class MsgSocketWrapper {
     private final Socket socket;
-
     private final static Logger logger = LoggerFactory.getLogger(MsgSocketWrapper.class);
     public MsgSocketWrapper(Socket socket) {
         this.socket = socket;
     }
-
     public List<Message> readMessages() throws IOException {
         List<Message> msgList = new ArrayList<>();
-        Object obj = null;
-        while ((obj = readObjectFromSocket()) != null) {
-            if (obj instanceof Message) {
-                Message msg = ((Message) obj);
+        Object objFromSocket;
+        while ((objFromSocket = readObjectFromSocket()) != null) {
+            if (objFromSocket instanceof Message) {
+                Message msg = ((Message) objFromSocket);
                 msgList.add(msg);
+            }else {
+                logger.error("Object is not instance of the message: " + objFromSocket);
             }
         }
         return msgList;
@@ -34,9 +34,10 @@ public class MsgSocketWrapper {
 
     public void writeObjectToSocket(Serializable object){
         try {
+            logger.debug("Socket: " + socket + " write object");
             socket.getOutputStream().write(objToByteArray(object));
         } catch (IOException e) {
-            logger.error("write object to socket error", e);
+            logger.error("write object to socket is failed", e);
         }
     }
 
@@ -48,11 +49,10 @@ public class MsgSocketWrapper {
         byte[] header = readStreamFromSocket(4, waitData);
 
         if(header == null){ return null;}
-
-        int objectLength = ByteBuffer.wrap(header).getInt();
-
-        byte[] object = readStreamFromSocket(objectLength);
-
+        logger.debug("Socket: " + socket + " read object. Wait data is " + waitData);
+        int objectSize = ByteBuffer.wrap(header).getInt();
+        logger.debug("Socket: " + socket + " object size must be is " + objectSize);
+        byte[] object = readStreamFromSocket(objectSize);
         return SerializationUtils.deserialize(object);
     }
 
@@ -65,12 +65,13 @@ public class MsgSocketWrapper {
             logger.trace("socket input stream is empty");
             return null;
         }
-
+        logger.debug("Socket: " + socket + " read stream. Count byte = " + countByte);
         int read = 0;
         byte[] buffer = new byte[countByte];
         while (read != countByte) {
             int byteSize = socket.getInputStream().read(buffer, read, countByte - read);
             read += byteSize;
+            logger.debug("Reading:" + byteSize + ", Total:" + read);
         }
         return buffer;
     }
@@ -86,6 +87,7 @@ public class MsgSocketWrapper {
     }
 
     public void writeMessage(Message message) {
+        logger.debug("Socket: " + socket + "Write " + message);
         try {
             socket.getOutputStream().write(objToByteArray(message));
         } catch (IOException e) {
@@ -95,9 +97,11 @@ public class MsgSocketWrapper {
 
     private byte[] objToByteArray(Serializable object){
         byte[] serObject = SerializationUtils.serialize(object);
-        ByteBuffer byteBuffer = ByteBuffer.allocate(4 + serObject.length);
-        byteBuffer.putInt(serObject.length);
+        int sizeVal = serObject.length;
+        ByteBuffer byteBuffer = ByteBuffer.allocate(4 + sizeVal);
+        byteBuffer.putInt(sizeVal);
         byteBuffer.put(serObject);
+        logger.debug("Socket: " + socket + "CONVERT TO BYTE[], size is " + sizeVal);
         return byteBuffer.array();
     }
 }

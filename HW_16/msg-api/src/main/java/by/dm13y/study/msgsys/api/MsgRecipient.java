@@ -43,38 +43,40 @@ public abstract class MsgRecipient {
                 registration();
             }
         } catch (SocketTimeoutException ex) {
-            logger.error("server socket is not response", ex);
+            logger.error("Timeout is exit", ex);
         } catch (IOException e) {
-            logger.error("build socket io exception", e);
+            logger.error("Build socket error", e);
         }
     }
 
     private void registration(){
+        logger.info("Handshake with msg system: start");
         msgSocket.writeObjectToSocket(sender);
         try {
             Object obj = msgSocket.readObjectFromSocket(true);
             if (obj instanceof Sender) {
                 sender = ((Sender) obj);
-                logger.info("id is:" + sender.getId());
+                logger.info("Handshake with msg system: done");
             }else {
                 logger.error("receive sender exception");
                 throw new IOException();
             }
         } catch (IOException e) {
-            logger.error("registration is failed", e);
+            logger.error("Handshake with msg system: FAILED!!!", e);
         }
     }
 
-    public void getRecipientsList(){
-        sendMsg(new MsgSys(sender, null, null, MsgSys.Operation.RECIPIENT_LIST));
+    public void getDBRecipientsList(){
+        sendMsg(new MsgSys(sender, null, null, MsgSys.Operation.DB_RECIPIENT_LIST));
         try {
             getMsg();
         } catch (IOException e) {
-            logger.error("get recipient list is failed", e);
+            logger.error("Recipient list is failed", e);
         }
     }
 
     public void sendMsg(Message msg){
+        logger.debug("SEND " + msg);
         msgSocket.writeMessage(msg);
     }
 
@@ -84,13 +86,20 @@ public abstract class MsgRecipient {
 
     public void getMsg() throws IOException {
         List<Message> messages = msgSocket.readMessages();
+        if (messages.size() > 0) {
+            logger.debug("GET MESSAGES. COUNT:" + messages.size());
+        }
         for (Message message : messages) {
+            logger.debug(message.toString());
             if (message instanceof MsgSys) {
                 MsgSys msgSys = (MsgSys) message;
+                logger.debug("Start sys handle");
                 handleSysMsg(msgSys, MsgSys.Operation.byId(msgSys.getMsgMarker()));
             }else if (message instanceof MsgException){
+                logger.debug("Start exception handle");
                 handleExceptionMsg(((MsgException) message));
-            } else if (message instanceof Message) {
+            } else {
+                logger.debug("Start simple handle");
                 handleReceiveMsg(message);
             }
         }

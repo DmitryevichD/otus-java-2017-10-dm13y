@@ -14,10 +14,15 @@ public abstract class Message<T> implements Serializable {
     @Setter
     private Long msgMarker;
 
-    public Message(Sender sender, Integer recipientId, T body, Long msgMarker){
+    Message(Sender sender, Integer recipientId, T body, Long msgMarker){
         this.recipientId = recipientId;
         this.sender = sender;
         this.body = body;
         this.msgMarker = msgMarker;
+    }
+
+    @Override
+    public String toString(){
+        return "MSG:(" + sender + " to: " + recipientId + " marker: " + msgMarker + ")";
     }
 }

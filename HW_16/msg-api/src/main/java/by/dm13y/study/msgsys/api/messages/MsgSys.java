@@ -7,17 +7,22 @@ public class MsgSys<T> extends Message {
         super(sender, recipientId, body, id.value);
     }
 
-    public enum Operation {
-        RECIPIENT_LIST(-1l);
+    @Override
+    public String toString(){
+        return "SYS_" + super.toString();
+    }
 
-        private Long value;
-        private Operation(Long id){
+    public enum Operation {
+        DB_RECIPIENT_LIST(-1L);
+
+        private final Long value;
+        Operation(Long id){
             value = id;
         }
 
         public static Operation byId(Long id) {
             if (id == -1) {
-                return Operation.RECIPIENT_LIST;
+                return Operation.DB_RECIPIENT_LIST;
             }
             throw new UnsupportedOperationException("operation not found");
         }

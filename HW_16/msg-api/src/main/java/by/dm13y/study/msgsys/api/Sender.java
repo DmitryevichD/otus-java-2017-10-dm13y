@@ -17,4 +17,9 @@ public class Sender implements Serializable {
         this.type = type;
     }
 
+    @Override
+    public String toString(){
+        return "Sender(id: " + id + ", type: " + type + ")";
+    }
+
 }

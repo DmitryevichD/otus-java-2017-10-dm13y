@@ -11,4 +11,9 @@ public class MsgException extends Message {
     public Throwable getThrowable(){
         return (Throwable)getBody();
     }
+
+    @Override
+    public String toString(){
+        return "EXC_" + super.toString();
+    }
 }

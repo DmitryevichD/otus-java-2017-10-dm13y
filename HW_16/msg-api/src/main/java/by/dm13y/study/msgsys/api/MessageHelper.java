@@ -9,18 +9,23 @@ public class MessageHelper {
 
     private final static Logger logger = LoggerFactory.getLogger(MessageHelper.class);
 
-    public static <T> Message buildResponce(Sender sender, Message srcMsg, T body) throws UnsupportedOperationException{
-        switch (srcMsg.getSender().getType()) {
-            case DB_SERVICE: return buildMsgToDB(sender, srcMsg, body);
-            case WEB_SOCKET: return buildMsgToWS(sender, srcMsg, body);
-            case MSG_CORE_SYS: return buildMsgSys(sender, srcMsg, body);
+    public static <T> Message buildResponse(Sender sender, Message srcMsg, T body) throws UnsupportedOperationException{
+        if (srcMsg instanceof MsgSys) {
+            return buildMsgSys(sender, srcMsg, body);
+        }else {
+            if (srcMsg.getSender().getType() == SenderType.DB_SERVICE) {
+                return buildMsgToDB(sender, srcMsg, body);
+            }
+            if (srcMsg.getSender().getType() == SenderType.WEB_SOCKET) {
+                return buildMsgToWS(sender, srcMsg, body);
+            }
         }
         logger.error(sender.getType() + " is not supported");
         throw new UnsupportedOperationException();
     }
 
     private static <T> MsgToDB buildMsgToDB(Sender sender, Message srcMsg, T body) {
-        return new MsgToDB(sender, srcMsg.getSender().getId(), (String)body, srcMsg.getMsgMarker());
+        return new MsgToDB(sender, srcMsg.getSender().getId(), body, srcMsg.getMsgMarker());
     }
 
     private static <T>  MsgSys buildMsgSys(Sender sender, Message srcMsg, T body) {
@@ -30,5 +35,4 @@ public class MessageHelper {
     private static <T> MsgToWS buildMsgToWS(Sender sender, Message srcMsg, T body) {
         return new MsgToWS(sender, srcMsg.getSender().getId(), body, srcMsg.getMsgMarker());
     }
-
 }

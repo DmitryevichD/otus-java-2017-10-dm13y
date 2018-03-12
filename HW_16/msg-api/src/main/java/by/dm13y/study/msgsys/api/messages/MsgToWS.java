@@ -7,4 +7,9 @@ public class MsgToWS<T> extends Message {
     public MsgToWS(Sender from, Integer toId, T body, Long customId) {
         super(from, toId, body, customId);
     }
+
+    @Override
+    public String toString(){
+        return "WC_" + super.toString();
+    }
 }

@@ -8,4 +8,8 @@ public class MsgToDB<T> extends Message{
         super(from, to, body, msgMarker);
     }
 
+    @Override
+    public String toString(){
+        return "DB_" + super.toString();
+    }
 }
