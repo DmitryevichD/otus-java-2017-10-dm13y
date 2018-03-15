@@ -10,7 +10,7 @@ public class MessageHelper {
     private final static Logger logger = LoggerFactory.getLogger(MessageHelper.class);
 
     public static <T> Message buildResponse(Sender sender, Message srcMsg, T body) throws UnsupportedOperationException{
-        if (srcMsg instanceof MsgSys) {
+        if (srcMsg.getSysInfo() != null) {
             return buildMsgSys(sender, srcMsg, body);
         }else {
             if (srcMsg.getSender().getType() == SenderType.DB_SERVICE) {
@@ -24,11 +24,12 @@ public class MessageHelper {
         throw new UnsupportedOperationException();
     }
 
+
     private static <T> MsgToDB buildMsgToDB(Sender sender, Message srcMsg, T body) {
         return new MsgToDB(sender, srcMsg.getSender().getId(), body, srcMsg.getMsgMarker());
     }
 
-    private static <T>  MsgSys buildMsgSys(Sender sender, Message srcMsg, T body) {
+    private static <T> MsgSys buildMsgSys(Sender sender, Message srcMsg, T body) {
         return new MsgSys(sender, srcMsg.getSender().getId(), body, MsgSys.Operation.byId(srcMsg.getMsgMarker()));
     }
 

@@ -20,7 +20,7 @@ class MsgQueue {
     private final Map<Sender, ConcurrentLinkedQueue<Message>> inputQueue = new ConcurrentHashMap<>();
     private final Map<Sender, ConcurrentLinkedQueue<Message>> outputQueue = new ConcurrentHashMap<>();
 
-    public synchronized void addRecipient(Sender sender, MsgSocketWrapper socket) {
+    public void addRecipient(Sender sender, MsgSocketWrapper socket) {
         logger.info("Add recipient:" + sender);
         socketMap.put(sender, socket);
         senderIdMap.put(sender.getId(), sender);
@@ -47,6 +47,7 @@ class MsgQueue {
                 .map(Sender::getId)
                 .collect(Collectors.toList());
         logger.debug("get recipient list for type " + senderType + " " + recipientList);
+
         return recipientList;
     }
 

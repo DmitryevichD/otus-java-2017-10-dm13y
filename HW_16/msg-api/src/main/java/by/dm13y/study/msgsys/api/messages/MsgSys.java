@@ -2,7 +2,7 @@ package by.dm13y.study.msgsys.api.messages;
 
 import by.dm13y.study.msgsys.api.Sender;
 
-public class MsgSys<T> extends Message {
+public class MsgSys<T> extends Message<T> {
     public MsgSys(Sender sender, Integer recipientId, T body, Operation id){
         super(sender, recipientId, body, id.value);
     }
@@ -10,6 +10,11 @@ public class MsgSys<T> extends Message {
     @Override
     public String toString(){
         return "SYS_" + super.toString();
+    }
+
+    @Override
+    public T getSysInfo() {
+        return body;
     }
 
     public enum Operation {
@@ -27,7 +32,7 @@ public class MsgSys<T> extends Message {
             throw new UnsupportedOperationException("operation not found");
         }
 
-        public static Operation byMsg(MsgSys msgSys){
+        public static Operation byMsg(Message msgSys){
             return byId(msgSys.getMsgMarker());
         }
     }

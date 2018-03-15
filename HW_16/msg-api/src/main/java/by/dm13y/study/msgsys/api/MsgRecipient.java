@@ -1,9 +1,9 @@
 package by.dm13y.study.msgsys.api;
 
 import by.dm13y.study.msgsys.api.messages.Message;
-import by.dm13y.study.msgsys.api.messages.MsgException;
 import by.dm13y.study.msgsys.api.messages.MsgSys;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +13,7 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.List;
 
-public abstract class MsgRecipient {
+public abstract class MsgRecipient implements Runnable {
     @Getter
     private static final int msgSysPort = 9999;
     private final String msgSysHost;
@@ -67,7 +67,7 @@ public abstract class MsgRecipient {
     }
 
     public void getDBRecipientsList(){
-        sendMsg(new MsgSys(sender, null, null, MsgSys.Operation.DB_RECIPIENT_LIST));
+        sendMsg(new MsgSys(sender, null, "", MsgSys.Operation.DB_RECIPIENT_LIST));
         try {
             getMsg();
         } catch (IOException e) {
@@ -80,9 +80,9 @@ public abstract class MsgRecipient {
         msgSocket.writeMessage(msg);
     }
 
-    public abstract void handleSysMsg(MsgSys msgState, MsgSys.Operation operId);
-    public abstract void handleExceptionMsg(MsgException msgException);
-    public abstract void handleReceiveMsg(Message msg);
+    public abstract void handleSysMsg(@NotNull Message msg);
+    public abstract void handleExceptionMsg(@NotNull Message msg);
+    public abstract void handleReceiveMsg(@NotNull Message msg);
 
     public void getMsg() throws IOException {
         List<Message> messages = msgSocket.readMessages();
@@ -91,17 +91,27 @@ public abstract class MsgRecipient {
         }
         for (Message message : messages) {
             logger.debug(message.toString());
-            if (message instanceof MsgSys) {
-                MsgSys msgSys = (MsgSys) message;
+            if (message.getSysInfo() != null) {
                 logger.debug("Start sys handle");
-                handleSysMsg(msgSys, MsgSys.Operation.byId(msgSys.getMsgMarker()));
-            }else if (message instanceof MsgException){
+                handleSysMsg(message);
+            }
+            if (message.getException() != null){
                 logger.debug("Start exception handle");
-                handleExceptionMsg(((MsgException) message));
-            } else {
+                handleExceptionMsg(message);
+            }
+            if (message.getBody() != null){
                 logger.debug("Start simple handle");
                 handleReceiveMsg(message);
             }
+        }
+    }
+
+    @Override
+    public void run(){
+        try {
+            getMsg();
+        } catch (IOException e) {
+            logger.error("db service error", e);
         }
     }
 }

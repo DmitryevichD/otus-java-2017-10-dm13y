@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 
-public class MsgClient extends MsgRecipient implements Runnable{
+public class MsgClient extends MsgRecipient{
     private final Logger logger = LoggerFactory.getLogger(MsgClient.class);
     private List<Integer> dbServiceList = new ArrayList<>();
     private final AtomicLong msgIdGenerator = new AtomicLong();
@@ -26,16 +26,17 @@ public class MsgClient extends MsgRecipient implements Runnable{
     }
 
     @Override
-    public void handleSysMsg(MsgSys msgSys, MsgSys.Operation operId) {
-        if(operId == MsgSys.Operation.DB_RECIPIENT_LIST){
-            //noinspection unchecked
-            dbServiceList = (List<Integer>)msgSys.getBody();
+    public void handleSysMsg(Message message){
+        MsgSys.Operation operation = MsgSys.Operation.byId(message.getMsgMarker());
+        if(operation == MsgSys.Operation.DB_RECIPIENT_LIST){
+
+            dbServiceList = (List<Integer>)message.getSysInfo();
         }
     }
 
     @Override
-    public void handleExceptionMsg(MsgException msgException) {
-        logger.error("msg exception", msgException);
+    public void handleExceptionMsg(Message message) {
+        logger.error("msg exception", message.getException());
     }
 
     @Override
@@ -79,21 +80,5 @@ public class MsgClient extends MsgRecipient implements Runnable{
     private void getCacheInfo(Message msg, WebSocketSession session) {
         localSenders.put(msg.getMsgMarker(), session);
         sendMsg(msg);
-    }
-
-    @Override
-    public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
-            try {
-                getMsg();
-                Thread.sleep(30);
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                logger.info("thread is interrupt");
-                Thread.currentThread().interrupt();
-            }
-        }
     }
 }

@@ -6,12 +6,14 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
-@Getter
+
 public abstract class Message<T> implements Serializable {
+    @Getter
     private final Integer recipientId;
+    @Getter
     private final Sender sender;
-    private final T body;
-    @Setter
+    protected final T body;
+    @Getter @Setter
     private Long msgMarker;
 
     Message(Sender sender, Integer recipientId, T body, Long msgMarker){
@@ -25,4 +27,8 @@ public abstract class Message<T> implements Serializable {
     public String toString(){
         return "MSG:(" + sender + " to: " + recipientId + " marker: " + msgMarker + ")";
     }
+
+    public T getSysInfo(){return null;}
+    public Throwable getException(){return null;};
+    public T getBody(){return null;}
 }

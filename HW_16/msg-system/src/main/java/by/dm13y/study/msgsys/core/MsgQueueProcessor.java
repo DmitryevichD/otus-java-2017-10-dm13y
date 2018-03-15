@@ -39,17 +39,16 @@ class MsgQueueProcessor extends Thread{
                 ConcurrentLinkedQueue<Message> senderInputQueue = entry.getValue();
 
                 if(!senderInputQueue.isEmpty()){
-                    logger.debug("Handle input queue for " + inputQueueSender);
+                    logger.debug("Handle input queue from " + inputQueueSender);
                     CompletableFuture.runAsync(() -> {
                         while (!senderInputQueue.isEmpty()) {
                             Message msg = senderInputQueue.poll();
                             logger.debug("GET " + msg);
-                            if (msg instanceof MsgSys) {
-                                MsgSys msgSys = ((MsgSys) msg);
-                                MsgSys.Operation operation = MsgSys.Operation.byMsg(msgSys);
+                            if(msg.getSysInfo() != null){
+                                MsgSys.Operation operation = MsgSys.Operation.byMsg(msg);
                                 logger.debug("Handle as system massage with operation: " + operation);
                                 if(operation == MsgSys.Operation.DB_RECIPIENT_LIST){
-                                    Message senderListMsg = MessageHelper.buildResponse(sender, msgSys,  msgQueue.getRecipientDBList(SenderType.DB_SERVICE));
+                                    Message senderListMsg = MessageHelper.buildResponse(sender, msg,  msgQueue.getRecipientDBList(SenderType.DB_SERVICE));
                                     msgQueue.addToOutputQueue(inputQueueSender, senderListMsg);
                                 }else {
                                     logger.error(operation + " is not supported");

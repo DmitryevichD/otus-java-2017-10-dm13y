@@ -42,6 +42,10 @@
             <version>1.10.19</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.intellij</groupId>
+            <artifactId>annotations</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <finalName>msg-api</finalName>

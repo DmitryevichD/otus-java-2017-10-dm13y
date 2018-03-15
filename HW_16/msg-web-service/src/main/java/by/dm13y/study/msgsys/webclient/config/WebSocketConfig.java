@@ -1,9 +1,7 @@
 package by.dm13y.study.msgsys.webclient.config;
 
-import by.dm13y.study.msgsys.webclient.msg.MsgClient;
 import by.dm13y.study.msgsys.webclient.websockets.CacheInfoWS;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -26,10 +24,5 @@ public class WebSocketConfig implements WebSocketConfigurer{
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(cacheInfoWS, "/ws/cacheinfo")
                 .addInterceptors(new HttpSessionHandshakeInterceptor());
-    }
-
-    @Bean
-    public MsgClient msgClient(){
-        return new MsgClient();
     }
 }

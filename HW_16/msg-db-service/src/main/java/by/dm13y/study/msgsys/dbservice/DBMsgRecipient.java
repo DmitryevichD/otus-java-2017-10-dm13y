@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import static java.lang.Thread.sleep;
 
-class DBMsgRecipient extends MsgRecipient implements Runnable{
+class DBMsgRecipient extends MsgRecipient{
     private final static Logger logger = LoggerFactory.getLogger(DBMsgRecipient.class);
     private final DBCacheInformer cacheInformer = new DBCacheInformerImpl();
 
@@ -18,14 +18,14 @@ class DBMsgRecipient extends MsgRecipient implements Runnable{
     }
 
     @Override
-    public void handleSysMsg(MsgSys msgState, MsgSys.Operation operId) {
+    public void handleSysMsg(Message msg){
         logger.debug("execute handler for state msg");
     }
 
     @Override
-    public void handleExceptionMsg(MsgException msgException) {
-        logger.error("receive exception", msgException.getThrowable());
-        throw new UnsupportedOperationException(msgException.getThrowable());
+    public void handleExceptionMsg(Message msg) {
+        logger.error("receive exception", msg.getException());
+        throw new UnsupportedOperationException(msg.getException());
     }
 
     @Override
@@ -51,24 +51,6 @@ class DBMsgRecipient extends MsgRecipient implements Runnable{
             response = new MsgException(sender, msg, new UnsupportedOperationException(msg.getClass() + " msg type unsupported"));
             sendMsg(response);
             logger.error("msg " + msg.getClass() + " msg type unsupported");
-        }
-
-    }
-
-    @Override
-    public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
-            try {
-                getMsg();
-            } catch (IOException ex) {
-                logger.error("db service error", ex);
-            }
-
-            try {
-                sleep(100);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
         }
 
     }
