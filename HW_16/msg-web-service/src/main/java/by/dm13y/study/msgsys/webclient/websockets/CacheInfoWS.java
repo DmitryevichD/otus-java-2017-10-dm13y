@@ -1,38 +1,37 @@
 package by.dm13y.study.msgsys.webclient.websockets;
 
 import by.dm13y.study.msgsys.webclient.msg.MsgClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.io.IOException;
 
 @Component
 public class CacheInfoWS extends TextWebSocketHandler {
+    private final Logger logger = LoggerFactory.getLogger(CacheInfoWS.class);
     private final MsgClient msgClient = new MsgClient();
-    private final ScheduledExecutorService scheduledService = Executors.newScheduledThreadPool(5);
 
     @PostConstruct
     public void init(){
         msgClient.connect();
         msgClient.getDBRecipientsList();
-        CompletableFuture.runAsync(() ->
-                scheduledService.scheduleWithFixedDelay(msgClient, 100, 100, TimeUnit.MILLISECONDS));
+    }
+
+    public void checkInputMsg(){
+        try {
+            msgClient.getMsg();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) {
         msgClient.getCacheInfoFromDB(session);
-    }
-
-    @PreDestroy
-    public void destroy(){
-        scheduledService.shutdown();
     }
 }

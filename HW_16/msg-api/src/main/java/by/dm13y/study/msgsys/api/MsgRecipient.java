@@ -43,9 +43,9 @@ public abstract class MsgRecipient implements Runnable {
                 registration();
             }
         } catch (SocketTimeoutException ex) {
-            logger.error("Timeout is exit", ex);
+            logger.error("Timeout is exit");
         } catch (IOException e) {
-            logger.error("Build socket error", e);
+            logger.error("Build socket error");
         }
     }
 
@@ -66,13 +66,22 @@ public abstract class MsgRecipient implements Runnable {
         }
     }
 
-    public void getDBRecipientsList(){
-        sendMsg(new MsgSys(sender, null, "", MsgSys.Operation.DB_RECIPIENT_LIST));
-        try {
-            getMsg();
-        } catch (IOException e) {
-            logger.error("Recipient list is failed", e);
+    public void getDBRecipientsList() {
+        if (!isConnected()) {
+            connect();
         }
+
+        if (isConnected()) {
+            sendMsg(new MsgSys(sender, null, "", MsgSys.Operation.DB_RECIPIENT_LIST));
+            try {
+                getMsg();
+            } catch (IOException e) {
+                logger.error("Recipient list is failed", e);
+            }
+        }else {
+            logger.error("socket is not connected");
+        }
+
     }
 
     public void sendMsg(Message msg){
